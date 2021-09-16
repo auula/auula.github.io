@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+	<meta name="generator" content="Hugo 0.74.3" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="打码匠"/>
+    <meta itemprop="name" content="打码匠" />
+    <meta name="twitter:title" content="打码匠" />
+    <meta name="application-name" content="打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+
+<div class="container">
+    <section class="my">
+        <div class="content">
+            
+            <p>Hi！My name is <code>Leon Ding</code>🥳.</p>
+<p>        I am a software engineer and a geek, I use technology stacks such as <code>Golang</code>, <code>Rust</code>, <code>Java</code>,<code>TypeScript</code>. love computer science related technologies and use them to solve problems in my life.</p>
+
+            
+            <div class="bio-social">
+                
+                
+                
+                
+                
+                
+                <a href="mailto:ding@ibyte.me" target="_blank" rel="noreferrer" title="ding@ibyte.me"
+                    aria-label="email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+                </a>
+                
+                
+                
+                
+                
+                
+                <a href="https://github.com/auula" target="_blank" rel="noreferrer" title="github"
+                    aria-label="github">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+                </a>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                <a href="https://twitter.com/auula_" target="_blank" rel="noreferrer" title="twitter"
+                    aria-label="twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 32 32" version="1.1">
+<g id="surface676">
+<path fill="currentColor" d="M 28 8.558594 C 27.117188 8.949219 26.167969 9.214844 25.171875 9.332031 C 26.1875 8.722656 26.96875 7.757812 27.335938 6.609375 C 26.386719 7.171875 25.332031 7.582031 24.210938 7.804688 C 23.3125 6.847656 22.03125 6.246094 20.617188 6.246094 C 17.898438 6.246094 15.691406 8.453125 15.691406 11.171875 C 15.691406 11.558594 15.734375 11.933594 15.820312 12.292969 C 11.726562 12.089844 8.097656 10.128906 5.671875 7.148438 C 5.246094 7.875 5.003906 8.722656 5.003906 9.625 C 5.003906 11.332031 5.871094 12.839844 7.195312 13.722656 C 6.386719 13.695312 5.628906 13.476562 4.964844 13.105469 C 4.964844 13.128906 4.964844 13.148438 4.964844 13.167969 C 4.964844 15.554688 6.660156 17.546875 8.914062 17.996094 C 8.5 18.109375 8.066406 18.171875 7.617188 18.171875 C 7.300781 18.171875 6.988281 18.140625 6.691406 18.082031 C 7.316406 20.039062 9.136719 21.460938 11.289062 21.503906 C 9.605469 22.824219 7.480469 23.609375 5.175781 23.609375 C 4.777344 23.609375 4.386719 23.585938 4 23.539062 C 6.179688 24.9375 8.765625 25.753906 11.546875 25.753906 C 20.605469 25.753906 25.558594 18.25 25.558594 11.742188 C 25.558594 11.53125 25.550781 11.316406 25.542969 11.105469 C 26.503906 10.410156 27.339844 9.542969 28 8.558594 Z M 28 8.558594 "/>
+</g>
+</svg>
+
+                </a>
+                
+                
+                
+                
+                
+                
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+
+<div class="container">
+    <section>
+        <h2>
+            Latest Articles
+            <a class="section-button" href="/articles">View all</a>
+        </h2>
+        <div class="posts">
+            
+            <div class="post">
+                <a href="/blog/post/redis-distributed-lock/">
+                    <div class="post-row">
+                        <time>Sep 16</time>
+                        <h3>Redis Distributed Lock</h3>
+                    </div>
+                    
+                </a>
+            </div>
+            
+            <div class="post">
+                <a href="/blog/post/alibaba-hot-ring/">
+                    <div class="post-row">
+                        <time>Sep 16</time>
+                        <h3>Alibaba Hot Ring Perceive</h3>
+                    </div>
+                    
+                </a>
+            </div>
+            
+            <div class="post">
+                <a href="/blog/post/compound-data-type-of-rust/">
+                    <div class="post-row">
+                        <time>Sep 16</time>
+                        <h3>Compound Data Type of Rust</h3>
+                    </div>
+                    
+                </a>
+            </div>
+            
+            <div class="post">
+                <a href="/blog/post/rust-falsework-desgin/">
+                    <div class="post-row">
+                        <time>Sep 16</time>
+                        <h3>Rust Falsework Desgin</h3>
+                    </div>
+                    
+                </a>
+            </div>
+            
+            <div class="post">
+                <a href="/blog/post/golang-channel-desgin/">
+                    <div class="post-row">
+                        <time>Sep 16</time>
+                        <h3>Golang Channel Desgin</h3>
+                    </div>
+                    
+                </a>
+            </div>
+            
+            <div class="post">
+                <a href="/blog/post/golang-memory-escape-analysis/">
+                    <div class="post-row">
+                        <time>Sep 16</time>
+                        <h3>Golang Memory Escape Analysis</h3>
+                    </div>
+                    
+                </a>
+            </div>
+            
+        </div>
+    </section>
+    
+    <section>
+        <h2>Projects</h2>
+        <div class="projects">
+            
+            <div class="project">
+                <div>
+                    <a href="https://github.com/auula/falsework" target="_blank" rel="noreferrer">
+                        <div class="icon">⚙️</div>
+                        <h3>falsework</h3>
+                    </a>
+                    <div class="description">A tool crate to quickly build rust command line application.</div>
+                </div>
+                <div class="flex">
+                    <a href="https://github.com/auula/falsework" class="button" target="_blank" rel="noreferrer">Source</a>
+                </div>
+            </div>
+            
+            <div class="project">
+                <div>
+                    <a href="https://github.com/auula/gsql" target="_blank" rel="noreferrer">
+                        <div class="icon">📦</div>
+                        <h3>gsql</h3>
+                    </a>
+                    <div class="description">GSQL is a structured query language code builder for golang.</div>
+                </div>
+                <div class="flex">
+                    <a href="https://github.com/auula/gsql" class="button" target="_blank" rel="noreferrer">Source</a>
+                </div>
+            </div>
+            
+            <div class="project">
+                <div>
+                    <a href="https://github.com/auula/s2s" target="_blank" rel="noreferrer">
+                        <div class="icon">🛠</div>
+                        <h3>s2s</h3>
+                    </a>
+                    <div class="description">s2s is a command line tool for database reverse engineering.</div>
+                </div>
+                <div class="flex">
+                    <a href="https://github.com/auula/s2s" class="button" target="_blank" rel="noreferrer">Source</a>
+                </div>
+            </div>
+            
+            <div class="project">
+                <div>
+                    <a href="https://github.com/auula/sessionx" target="_blank" rel="noreferrer">
+                        <div class="icon">🧰</div>
+                        <h3>sessionx</h3>
+                    </a>
+                    <div class="description">A web session library for golang.</div>
+                </div>
+                <div class="flex">
+                    <a href="https://github.com/auula/sessionx" class="button" target="_blank" rel="noreferrer">Source</a>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+</div>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>text on 打码匠</title>
+    <link>http://www.ibyte.me/blog/tags/text/</link>
+    <description>Recent content in text on 打码匠</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 09 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.ibyte.me/blog/tags/text/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Example Lazy Load Image</title>
+      <link>http://www.ibyte.me/blog/post-copy/example-lazy-load-image/</link>
+      <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.ibyte.me/blog/post-copy/example-lazy-load-image/</guid>
+      <description>Nya nya nyan meow meow mama  More napping, more napping all the napping is exhausting stretch out on bed you are a captive audience while sitting on the toilet, pet me slap the dog because cats rule bleghbleghvomit my furball really tie the room together always hungry. Humans,humans, humans oh how much they love us felines we are the center of attention they feed, they clean miaow then turn around and show you my bum.</description>
+    </item>
+    
+    <item>
+      <title>Placeholder Text</title>
+      <link>http://www.ibyte.me/blog/post-copy/placeholder-text/</link>
+      <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.ibyte.me/blog/post-copy/placeholder-text/</guid>
+      <description>&lt;p&gt;Lorem est tota propiore conpellat pectoribus de pectora summo.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

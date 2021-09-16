@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Traffic Restrictions | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Traffic Restrictions | 打码匠"/>
+    <meta itemprop="name" content="Traffic Restrictions | 打码匠" />
+    <meta name="twitter:title" content="Traffic Restrictions | 打码匠" />
+    <meta name="application-name" content="Traffic Restrictions | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:45:00&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:45:00&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Traffic Restrictions",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  689 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Traffic Restrictions</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 4 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h2 id="前-言">
+    <a href="#%e5%89%8d-%e8%a8%80" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    前 言
+</h2>
+<blockquote>
+<p>在开发高并发系统时，我们可能会遇到接口访问频次过高，为了保证系统的高可用和稳定性，这时候就需要做流量限制，你可能是用的 <code>Nginx</code> 这种 <code>Web Server</code> 来控制请求，也可能是用了一些流行的类库实现。限流是高并发系统的一大杀器，在设计限流算法之前我们先来了解一下它们是什么。</p>
+</blockquote>
+<h2 id="限-流">
+    <a href="#%e9%99%90-%e6%b5%81" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    限 流
+</h2>
+<p><code>限流</code>的目的是通过对并发访问请求进行限速，或者对一个时间窗口内的请求进行限速来保护系统，一旦达到限制速率则可以拒绝服务、排队或等待、降级等处理。通过对并发（或者一定时间窗口内）请求进行限速来保护系统，一旦达到限制速率则拒绝服务（定向到错误页或告知资源没有了）、排队等待（比如秒杀、评论、下单）、降级（返回兜底数据或默认数据）。</p>
+<p>如 图:</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn8bgfh0pzj30pt0ii4bx.jpg" 
+    alt="自己魔改出来的漫画" 
+     /></p>
+<p>如图上的漫画，在某个时间段流量上来了，服务的接口访问频率可能会非常快，如果我们没有对接口访问频次做限制可能会导致服务器无法承受过高的压力挂掉，这时候也可能会产生数据丢失，所以就要对其进行限流处理。</p>
+<p>限流算法就可以帮助我们去控制每个接口或程序的函数被调用频率，它有点儿像保险丝，防止系统因为超过访问频率或并发量而引起瘫痪。我们可能在调用某些第三方的接口的时候会看到类似这样的响应头：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">X-RateLimit-Limit</span><span class="p">:</span><span class="w"> </span><span class="m">60</span><span class="w">         </span>//每秒60次请求<span class="w">
+</span><span class="w"></span><span class="k">X-RateLimit-Remaining</span><span class="p">:</span><span class="w"> </span><span class="m">22</span><span class="w">     </span>//当前还剩下多少次<span class="w">
+</span><span class="w"></span><span class="k">X-RateLimit-Reset</span><span class="p">:</span><span class="w"> </span><span class="m">1612184024</span><span class="w"> </span>//限制重置时间<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>上面的 <code>HTTP Response</code> 是通过响应头告诉调用方服务端的限流频次是怎样的，保证后端的接口访问上限。为了解决限流问题出现了很多的算法，它们都有不同的用途，通常的策略就是拒绝超出的请求，或者让超出的请求排队等待。</p>
+<p><strong>一般来说，限流的常用处理手段有：</strong></p>
+<ul>
+<li>计数器</li>
+<li>滑动窗口</li>
+<li>漏桶</li>
+<li>令牌桶</li>
+</ul>
+<h2 id="计数器">
+    <a href="#%e8%ae%a1%e6%95%b0%e5%99%a8" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    计数器
+</h2>
+<blockquote>
+<p>计数器是一种最简单限流算法，其原理就是：<code>在一段时间间隔内，对请求进行计数，与阀值进行比较判断是否需要限流，一旦到了时间临界点，将计数器清零。</code>
+这个就像你去坐车一样，车厢规定了多少个位置，满了就不让上车了，不然就是超载了，被交警叔叔抓到了就要罚款的，如果我们的系统那就不是罚款的事情了，可能直接崩掉了。</p>
+</blockquote>
+<ol>
+<li>可以在程序中设置一个变量 <code>count</code>，当过来一个请求我就将这个数<code> +1</code>，同时记录请求时间。</li>
+<li>当下一个请求来的时候判断 <code>count</code> 的计数值是否超过设定的频次，以及当前请求的时间和第一次请求时间是否在 <code>1</code> 分钟内。</li>
+<li>如果在 <code>1</code> 分钟内并且超过设定的频次则证明请求过多，后面的请求就拒绝掉。</li>
+<li>如果该请求与第一个请求的间隔时间大于计数周期，且 <code>count</code> 值还在限流范围内，就重置 <code>count</code>。</li>
+</ol>
+<p>代码实现:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;log&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">Counter</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">rate</span>  <span class="kt">int</span>           <span class="c1">//计数周期内最多允许的请求数
+</span><span class="c1"></span>    <span class="nx">begin</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>     <span class="c1">//计数开始时间
+</span><span class="c1"></span>    <span class="nx">cycle</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="c1">//计数周期
+</span><span class="c1"></span>    <span class="nx">count</span> <span class="kt">int</span>           <span class="c1">//计数周期内累计收到的请求数
+</span><span class="c1"></span>    <span class="nx">lock</span>  <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">Counter</span><span class="p">)</span> <span class="nf">Allow</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+    <span class="k">defer</span> <span class="nx">l</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nx">l</span><span class="p">.</span><span class="nx">count</span> <span class="o">==</span> <span class="nx">l</span><span class="p">.</span><span class="nx">rate</span><span class="o">-</span><span class="mi">1</span> <span class="p">{</span>
+        <span class="nx">now</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">begin</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">cycle</span> <span class="p">{</span>
+            <span class="c1">//速度允许范围内， 重置计数器
+</span><span class="c1"></span>            <span class="nx">l</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">//没有达到速率限制，计数加1
+</span><span class="c1"></span>        <span class="nx">l</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span>
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">Counter</span><span class="p">)</span> <span class="nf">Set</span><span class="p">(</span><span class="nx">r</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">cycle</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">rate</span> <span class="p">=</span> <span class="nx">r</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">begin</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">cycle</span> <span class="p">=</span> <span class="nx">cycle</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">count</span> <span class="p">=</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">Counter</span><span class="p">)</span> <span class="nf">Reset</span><span class="p">(</span><span class="nx">t</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">begin</span> <span class="p">=</span> <span class="nx">t</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">count</span> <span class="p">=</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+    <span class="kd">var</span> <span class="nx">lr</span> <span class="nx">Counter</span>
+    <span class="nx">lr</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span> <span class="c1">// 1s内最多请求3次
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;创建请求:&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
+        <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="nx">lr</span><span class="p">.</span><span class="nf">Allow</span><span class="p">()</span> <span class="p">{</span>
+              <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;响应请求:&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
+          <span class="p">}</span>
+          <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+        <span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+
+        <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">200</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>OutPut:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">2021/02/01 21:16:12 创建请求: <span class="m">0</span>
+2021/02/01 21:16:12 响应请求: <span class="m">0</span>
+2021/02/01 21:16:12 创建请求: <span class="m">1</span>
+2021/02/01 21:16:12 响应请求: <span class="m">1</span>
+2021/02/01 21:16:12 创建请求: <span class="m">2</span>
+2021/02/01 21:16:13 创建请求: <span class="m">3</span>
+2021/02/01 21:16:13 创建请求: <span class="m">4</span>
+2021/02/01 21:16:13 创建请求: <span class="m">5</span>
+2021/02/01 21:16:13 响应请求: <span class="m">5</span>
+2021/02/01 21:16:13 创建请求: <span class="m">6</span>
+2021/02/01 21:16:13 响应请求: <span class="m">6</span>
+2021/02/01 21:16:13 创建请求: <span class="m">7</span>
+2021/02/01 21:16:13 响应请求: <span class="m">7</span>
+2021/02/01 21:16:14 创建请求: <span class="m">8</span>
+2021/02/01 21:16:14 创建请求: <span class="m">9</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到我们设置的是每<code>200ms</code>创建一个请求，明显高于<code>1</code>秒最多<code>3</code>个请求的限制，运行起来之后发现编号为 <code>2、3、4、8、9</code> 的请求被丢弃，说明限流成功。</p>
+<p><strong>那么问题来了，如果有个需求对于某个接口 <code>/query</code> 每分钟最多允许访问 200 次，假设有个用户在第 59 秒的最后几毫秒瞬间发送 200 个请求，当 59 秒结束后 <code>Counter</code> 清零了，他在下一秒的时候又发送 200 个请求。那么在 1 秒钟内这个用户发送了 2 倍的请求，这个是符合我们的设计逻辑的，这也是计数器方法的设计缺陷，系统可能会承受恶意用户的大量请求，甚至击穿系统。</strong></p>
+<p>如下图:</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmr45dwvpoj30om0eo75c.jpg" 
+    alt="计数图解" 
+     /></p>
+<p>这种方法虽然简单，但也有个大问题就是没有很好的处理单位时间的边界。</p>
+<h2 id="滑动窗口">
+    <a href="#%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    滑动窗口
+</h2>
+<p><code>滑动窗口</code>是针对计数器存在的临界点缺陷，所谓 <code>滑动窗口（Sliding window）</code> 是一种流量控制技术，这个词出现在 <code>TCP</code> 协议中。<code>滑动窗口</code>把固定时间片进行划分，并且随着时间的流逝，进行移动，固定数量的可以移动的格子，进行计数并判断阀值。</p>
+<p>如 图：</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmr46n366gj30y80eota1.jpg" 
+    alt="图解1" 
+     /></p>
+<p>上图中我们用红色的虚线代表一个时间窗口（<code>一分钟</code>），每个时间窗口有 <code>6</code> 个格子，每个格子是 <code>10</code> 秒钟。每过 <code>10</code> 秒钟时间窗口向右移动一格，可以看红色箭头的方向。我们为每个格子都设置一个独立的计数器 <code>Counter</code>，假如一个请求在 <code>0:45</code> 访问了那么我们将第五个格子的计数器 <code>+1</code>（也是就是 <code>0:40~0:50</code>），在判断限流的时候需要把所有格子的计数加起来和设定的频次进行比较即可。</p>
+<p>那么滑动窗口如何解决我们上面遇到的问题呢？来看下面的图：</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmr47hbj6dj31cq0kwgpd.jpg" 
+    alt="图解2" 
+     /></p>
+<p>当用户在<code>0:59</code> 秒钟发送了 <code>200 </code>个请求就会被第六个格子的计数器记录 <code>+200</code>，当下一秒的时候时间窗口向右移动了一个，此时计数器已经记录了该用户发送的 <code>200</code> 个请求，所以再发送的话就会触发限流，则拒绝新的请求。</p>
+<p>其实计数器就是滑动窗口啊，只不过只有一个格子而已，所以想让限流做的更精确只需要划分更多的格子就可以了，为了更精确我们也不知道到底该设置多少个格子，<code>格子的数量影响着滑动窗口算法的精度，依然有时间片的概念，无法根本解决临界点问题</code>。</p>
+<ul>
+<li>相关算法实现 <a href="github.com/RussellLuo/slidingwindow">github.com/RussellLuo/slidingwindow</a></li>
+</ul>
+<h2 id="漏-桶">
+    <a href="#%e6%bc%8f-%e6%a1%b6" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    漏 桶
+</h2>
+<p><code>漏桶算法（Leaky Bucket）</code>，原理就是一个固定容量的漏桶，按照固定速率流出水滴。用过水龙头都知道，打开龙头开关水就会流下滴到水桶里，而漏桶指的是水桶下面有个漏洞可以出水。如果水龙头开的特别大那么水流速就会过大，这样就可能导致水桶的水满了然后溢出。</p>
+<p>如 图：</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmr4ascdhrj30cb08bq37.jpg" 
+    alt="漏 桶" 
+     /></p>
+<p>一个固定容量的桶，有水流进来，也有水流出去。对于流进来的水来说，我们无法预计一共有多少水会流进来，也无法预计水流的速度。但是对于流出去的水来说，这个桶可以固定水流出的速率（<code>处理速度</code>），从而达到 <code>流量整形</code> 和 <code>流量控制</code> 的效果。</p>
+<p>代码实现:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">LeakyBucket</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">rate</span>       <span class="kt">float64</span> <span class="c1">//固定每秒出水速率
+</span><span class="c1"></span>    <span class="nx">capacity</span>   <span class="kt">float64</span> <span class="c1">//桶的容量
+</span><span class="c1"></span>    <span class="nx">water</span>      <span class="kt">float64</span> <span class="c1">//桶中当前水量
+</span><span class="c1"></span>    <span class="nx">lastLeakMs</span> <span class="kt">int64</span>   <span class="c1">//桶上次漏水时间戳 ms
+</span><span class="c1"></span>
+    <span class="nx">lock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">LeakyBucket</span><span class="p">)</span> <span class="nf">Allow</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+    <span class="k">defer</span> <span class="nx">l</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+
+    <span class="nx">now</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span>
+    <span class="nx">eclipse</span> <span class="o">:=</span> <span class="nb">float64</span><span class="p">((</span><span class="nx">now</span> <span class="o">-</span> <span class="nx">l</span><span class="p">.</span><span class="nx">lastLeakMs</span><span class="p">))</span> <span class="o">*</span> <span class="nx">l</span><span class="p">.</span><span class="nx">rate</span> <span class="o">/</span> <span class="mi">1000</span> <span class="c1">//先执行漏水
+</span><span class="c1"></span>    <span class="nx">l</span><span class="p">.</span><span class="nx">water</span> <span class="p">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">water</span> <span class="o">-</span> <span class="nx">eclipse</span>                              <span class="c1">//计算剩余水量
+</span><span class="c1"></span>    <span class="nx">l</span><span class="p">.</span><span class="nx">water</span> <span class="p">=</span> <span class="nx">math</span><span class="p">.</span><span class="nf">Max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">l</span><span class="p">.</span><span class="nx">water</span><span class="p">)</span>                           <span class="c1">//桶干了
+</span><span class="c1"></span>    <span class="nx">l</span><span class="p">.</span><span class="nx">lastLeakMs</span> <span class="p">=</span> <span class="nx">now</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">water</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">&lt;</span> <span class="nx">l</span><span class="p">.</span><span class="nx">capacity</span> <span class="p">{</span>
+        <span class="c1">// 尝试加水,并且水还未满
+</span><span class="c1"></span>        <span class="nx">l</span><span class="p">.</span><span class="nx">water</span><span class="o">++</span>
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// 水满，拒绝加水
+</span><span class="c1"></span>        <span class="k">return</span> <span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">LeakyBucket</span><span class="p">)</span> <span class="nf">Set</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">c</span> <span class="kt">float64</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">rate</span> <span class="p">=</span> <span class="nx">r</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">capacity</span> <span class="p">=</span> <span class="nx">c</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">water</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">lastLeakMs</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>漏桶算法有以下特点：</p>
+<ul>
+<li>漏桶具有固定容量，出水速率是固定常量（流出请求）</li>
+<li>如果桶是空的，则不需流出水滴</li>
+<li>可以以任意速率流入水滴到漏桶（流入请求）</li>
+<li>如果流入水滴超出了桶的容量，则流入的水滴溢出（新请求被拒绝）</li>
+</ul>
+<p>漏桶限制的是常量流出速率（即流出速率是一个固定常量值），所以最大的速率就是出水的速率，不能出现突发流量。</p>
+<h2 id="令牌桶算法">
+    <a href="#%e4%bb%a4%e7%89%8c%e6%a1%b6%e7%ae%97%e6%b3%95" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    令牌桶算法
+</h2>
+<p>令牌桶算法<code>（Token Bucket）</code>是网络流量整形<code>（Traffic Shaping）</code>和速率限制<code>（Rate Limiting）</code>中最常使用的一种算法。典型情况下，令牌桶算法用来控制发送到网络上的数据的数目，并允许突发数据的发送。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmr4cwnxkmj30bq07iwet.jpg" 
+    alt="令牌桶算法" 
+     /></p>
+<p>我们有一个固定的桶，桶里存放着令牌<code>（token）</code>。一开始桶是空的，系统按固定的时间<code>（rate）</code>往桶里添加令牌，直到桶里的令牌数满，多余的请求会被丢弃。当请求来的时候，从桶里移除一个令牌，如果桶是空的则拒绝请求或者阻塞。</p>
+<p>实现代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">TokenBucket</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">rate</span>         <span class="kt">int64</span> <span class="c1">//固定的token放入速率, r/s
+</span><span class="c1"></span>    <span class="nx">capacity</span>     <span class="kt">int64</span> <span class="c1">//桶的容量
+</span><span class="c1"></span>    <span class="nx">tokens</span>       <span class="kt">int64</span> <span class="c1">//桶中当前token数量
+</span><span class="c1"></span>    <span class="nx">lastTokenSec</span> <span class="kt">int64</span> <span class="c1">//桶上次放token的时间戳 s
+</span><span class="c1"></span>
+    <span class="nx">lock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">TokenBucket</span><span class="p">)</span> <span class="nf">Allow</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+    <span class="k">defer</span> <span class="nx">l</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+
+    <span class="nx">now</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span> <span class="p">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span> <span class="o">+</span> <span class="p">(</span><span class="nx">now</span><span class="o">-</span><span class="nx">l</span><span class="p">.</span><span class="nx">lastTokenSec</span><span class="p">)</span><span class="o">*</span><span class="nx">l</span><span class="p">.</span><span class="nx">rate</span> <span class="c1">// 先添加令牌
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span> <span class="p">&gt;</span> <span class="nx">l</span><span class="p">.</span><span class="nx">capacity</span> <span class="p">{</span>
+        <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span> <span class="p">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">capacity</span>
+    <span class="p">}</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">lastTokenSec</span> <span class="p">=</span> <span class="nx">now</span>
+    <span class="k">if</span> <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="c1">// 还有令牌，领取令牌
+</span><span class="c1"></span>        <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span><span class="o">--</span>
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// 没有令牌,则拒绝
+</span><span class="c1"></span>        <span class="k">return</span> <span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">TokenBucket</span><span class="p">)</span> <span class="nf">Set</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">c</span> <span class="kt">int64</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">rate</span> <span class="p">=</span> <span class="nx">r</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">capacity</span> <span class="p">=</span> <span class="nx">c</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">tokens</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">l</span><span class="p">.</span><span class="nx">lastTokenSec</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>令牌桶有以下特点：</p>
+<ul>
+<li>令牌按固定的速率被放入令牌桶中</li>
+<li>桶中最多存放 <code>B</code> 个令牌，当桶满时，新添加的令牌被丢弃或拒绝</li>
+<li>如果桶中的令牌不足 <code>N</code> 个，则不会删除令牌，且请求将被限流（丢弃或阻塞等待）</li>
+</ul>
+<p>令牌桶限制的是平均流入速率（允许突发请求，只要有令牌就可以处理，支持一次拿3个令牌，4个令牌&hellip;），并允许一定程度突发流量。</p>
+<h2 id="小-结">
+    <a href="#%e5%b0%8f-%e7%bb%93" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    小 结
+</h2>
+<p>目前常用的是<code>令牌桶</code>这种，本文介绍了几种常见的限流算法实现，文章撰写不易，点个关注不迷路。</p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/web-safe-csrf/" title="Previous post (older)">
+            <span>Previous</span>
+            Web Safe Csrf
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/rust-box-pointer/" title="Next post (newer)">
+            <span>Next</span>
+            Rust Box Pointer
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

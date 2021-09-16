@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Golang Channel Desgin | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Golang Channel Desgin | 打码匠"/>
+    <meta itemprop="name" content="Golang Channel Desgin | 打码匠" />
+    <meta name="twitter:title" content="Golang Channel Desgin | 打码匠" />
+    <meta name="application-name" content="Golang Channel Desgin | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:19:16&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:19:16&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Golang Channel Desgin",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  611 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Golang Channel Desgin</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 3 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <p>相信大家在开发的过程中经常会使用到<code>go</code>中并发利器<code>channel</code>，<code>channel</code> 是<code>CSP</code>并发模型中最重要的一个组件，两个独立的并发实体通过共享的通讯<code>channel</code>进行通信。大多数人只是会用这么个结构很少有人讨论它底层实现，这篇文章讲写写<code>channel</code>的底层实现。</p>
+<h2 id="channel">
+    <a href="#channel" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    channel
+</h2>
+<p><code>channel</code>的底层实现是一个结构体，<a href="https://github.com/golang/go/blob/41d8e61a6b9d8f9db912626eb2bbc535e929fefc/src/runtime/chan.go#L32">源代码</a>如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">hchan</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">qcount</span>   <span class="kt">uint</span>           <span class="c1">// total data in the queue
+</span><span class="c1"></span>    <span class="nx">dataqsiz</span> <span class="kt">uint</span>           <span class="c1">// size of the circular queue
+</span><span class="c1"></span>    <span class="nx">buf</span>      <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span> <span class="c1">// points to an array of dataqsiz elements
+</span><span class="c1"></span>    <span class="nx">elemsize</span> <span class="kt">uint16</span>
+    <span class="nx">closed</span>   <span class="kt">uint32</span>
+    <span class="nx">elemtype</span> <span class="o">*</span><span class="nx">_type</span> <span class="c1">// element type
+</span><span class="c1"></span>    <span class="nx">sendx</span>    <span class="kt">uint</span>   <span class="c1">// send index
+</span><span class="c1"></span>    <span class="nx">recvx</span>    <span class="kt">uint</span>   <span class="c1">// receive index
+</span><span class="c1"></span>    <span class="nx">recvq</span>    <span class="nx">waitq</span>  <span class="c1">// list of recv waiters
+</span><span class="c1"></span>    <span class="nx">sendq</span>    <span class="nx">waitq</span>  <span class="c1">// list of send waiters
+</span><span class="c1"></span>
+    <span class="c1">// lock protects all fields in hchan, as well as several
+</span><span class="c1"></span>    <span class="c1">// fields in sudogs blocked on this channel.
+</span><span class="c1"></span>    <span class="c1">//
+</span><span class="c1"></span>    <span class="c1">// Do not change another G&#39;s status while holding this lock
+</span><span class="c1"></span>    <span class="c1">// (in particular, do not ready a G), as this can deadlock
+</span><span class="c1"></span>    <span class="c1">// with stack shrinking.
+</span><span class="c1"></span>    <span class="nx">lock</span> <span class="nx">mutex</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可能看源代码不是很好看得懂，这里我个人画了一张图方便大家查看，我在上面标注了不同颜色，并且注释其作用。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtkvnaup23j615r0u0mzv02.jpg" 
+    alt="hchan struct" 
+     /></p>
+<p>通道像一个<code>传送带</code>或者<code>队列</code>，总是遵循<code>FIFO</code>的规则，保证收发数据的顺序，通道是<code>goroutine</code>间重要通信的方式，是并发安全的。</p>
+<h2 id="buf">
+    <a href="#buf" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    buf
+</h2>
+<p><code>hchan</code>结构体中的<code>buf</code>指向一个循环队列，用来实现循环队列，<code>sendx</code>是循环队列的队尾指针，<code>recvx</code>是循环队列的队头指针，<code>dataqsize</code>是缓存型通道的大小，<code>qcount</code>是记录通道内元素个数。</p>
+<p>在日常开发过程中用的最多就是<code>ch := make(chan int, 10)</code>这样的方式创建一个通道，如果这要声明初始化的话，这个通道就是有缓冲区的，也是图上紫色的<code>buf</code>，<code>buf</code>是在<code>make</code>的时候程序创建的，它有<code>元素大小*元素个数</code>组成一个循环队列，可以看做成一个环形结构，<code>buf</code>则是一个指针指向这个环。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtl27ej1w4j60qo0k0t9202.jpg" 
+    alt="ring" 
+     /></p>
+<p>上图对应的代码那就是<code>ch = make(chan int,6)</code>，<code>buf</code>指向这个环在<code>heap</code>上的地址。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">makechan</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">chantype</span><span class="p">,</span> <span class="nx">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">hchan</span> <span class="p">{</span>
+    <span class="nx">elem</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">elem</span>
+
+    <span class="c1">// compiler checks this but be safe.
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">elem</span><span class="p">.</span><span class="nx">size</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">16</span> <span class="p">{</span>
+        <span class="nf">throw</span><span class="p">(</span><span class="s">&#34;makechan: invalid channel element type&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">hchanSize</span><span class="o">%</span><span class="nx">maxAlign</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">elem</span><span class="p">.</span><span class="nx">align</span> <span class="p">&gt;</span> <span class="nx">maxAlign</span> <span class="p">{</span>
+        <span class="nf">throw</span><span class="p">(</span><span class="s">&#34;makechan: bad alignment&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+	  <span class="nx">mem</span><span class="p">,</span> <span class="nx">overflow</span> <span class="o">:=</span> <span class="nx">math</span><span class="p">.</span><span class="nf">MulUintptr</span><span class="p">(</span><span class="nx">elem</span><span class="p">.</span><span class="nx">size</span><span class="p">,</span> <span class="nb">uintptr</span><span class="p">(</span><span class="nx">size</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nx">overflow</span> <span class="o">||</span> <span class="nx">mem</span> <span class="p">&gt;</span> <span class="nx">maxAlloc</span><span class="o">-</span><span class="nx">hchanSize</span> <span class="o">||</span> <span class="nx">size</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nf">plainError</span><span class="p">(</span><span class="s">&#34;makechan: size out of range&#34;</span><span class="p">))</span>
+    <span class="p">}</span>
+
+	<span class="c1">// Hchan does not contain pointers interesting for GC when elements stored in buf do not contain pointers.
+</span><span class="c1"></span>    <span class="c1">// buf points into the same allocation, elemtype is persistent.
+</span><span class="c1"></span>    <span class="c1">// SudoG&#39;s are referenced from their owning thread so they can&#39;t be collected.
+</span><span class="c1"></span>    <span class="c1">// TODO(dvyukov,rlh): Rethink when collector can move allocated objects.
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">c</span> <span class="o">*</span><span class="nx">hchan</span>
+    <span class="k">switch</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">mem</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1">// Queue or element size is zero.
+</span><span class="c1"></span>        <span class="nx">c</span> <span class="p">=</span> <span class="p">(</span><span class="o">*</span><span class="nx">hchan</span><span class="p">)(</span><span class="nf">mallocgc</span><span class="p">(</span><span class="nx">hchanSize</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span>
+        <span class="c1">// Race detector uses this location for synchronization.
+</span><span class="c1"></span>      <span class="nx">c</span><span class="p">.</span><span class="nx">buf</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">raceaddr</span><span class="p">()</span>
+    <span class="k">case</span> <span class="nx">elem</span><span class="p">.</span><span class="nx">ptrdata</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1">// Elements do not contain pointers.
+</span><span class="c1"></span>        <span class="c1">// Allocate hchan and buf in one call.
+</span><span class="c1"></span>        <span class="nx">c</span> <span class="p">=</span> <span class="p">(</span><span class="o">*</span><span class="nx">hchan</span><span class="p">)(</span><span class="nf">mallocgc</span><span class="p">(</span><span class="nx">hchanSize</span><span class="o">+</span><span class="nx">mem</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span>
+        <span class="nx">c</span><span class="p">.</span><span class="nx">buf</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">c</span><span class="p">),</span> <span class="nx">hchanSize</span><span class="p">)</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="c1">// Elements contain pointers.
+</span><span class="c1"></span>        <span class="nx">c</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">hchan</span><span class="p">)</span>
+        <span class="nx">c</span><span class="p">.</span><span class="nx">buf</span> <span class="p">=</span> <span class="nf">mallocgc</span><span class="p">(</span><span class="nx">mem</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">c</span><span class="p">.</span><span class="nx">elemsize</span> <span class="p">=</span> <span class="nb">uint16</span><span class="p">(</span><span class="nx">elem</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span>
+    <span class="nx">c</span><span class="p">.</span><span class="nx">elemtype</span> <span class="p">=</span> <span class="nx">elem</span>
+    <span class="nx">c</span><span class="p">.</span><span class="nx">dataqsiz</span> <span class="p">=</span> <span class="nb">uint</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span>
+    <span class="nf">lockInit</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">c</span><span class="p">.</span><span class="nx">lock</span><span class="p">,</span> <span class="nx">lockRankHchan</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nx">debugChan</span> <span class="p">{</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s">&#34;makechan: chan=&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="s">&#34;; elemsize=&#34;</span><span class="p">,</span> <span class="nx">elem</span><span class="p">.</span><span class="nx">size</span><span class="p">,</span> <span class="s">&#34;; dataqsiz=&#34;</span><span class="p">,</span> <span class="nx">size</span><span class="p">,</span> <span class="s">&#34;\n&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">c</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面就是对应的代码实现，上来它会检查你一系列参数是否合法，然后在通过<code>mallocgc</code>在内存开辟这块空间，然后返回。</p>
+<h2 id="sendx-and-recvx">
+    <a href="#sendx-and-recvx" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    sendx and recvx
+</h2>
+<p>下面我手动模拟一个<code>ring</code>实现的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Queue cycle buffer
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">CycleQueue</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">data</span>                  <span class="p">[]</span><span class="kd">interface</span><span class="p">{}</span> <span class="c1">// 存放元素的数组，准确来说是切片
+</span><span class="c1"></span>    <span class="nx">frontIndex</span><span class="p">,</span> <span class="nx">rearIndex</span> <span class="kt">int</span>           <span class="c1">// frontIndex 头指针,rearIndex 尾指针
+</span><span class="c1"></span>    <span class="nx">size</span>                  <span class="kt">int</span>           <span class="c1">// circular 的大小
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="c1">// NewQueue Circular Queue
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">NewQueue</span><span class="p">(</span><span class="nx">size</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">CycleQueue</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nx">size</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">size</span> <span class="p">&lt;</span> <span class="mi">10</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;initialize circular queue size fail,%d not legal,size &gt;= 10&#34;</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">cq</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">CycleQueue</span><span class="p">)</span>
+    <span class="nx">cq</span><span class="p">.</span><span class="nx">data</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kd">interface</span><span class="p">{},</span> <span class="nx">size</span><span class="p">)</span>
+    <span class="nx">cq</span><span class="p">.</span><span class="nx">size</span> <span class="p">=</span> <span class="nx">size</span>
+    <span class="k">return</span> <span class="nx">cq</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Push  add data to queue
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">q</span> <span class="o">*</span><span class="nx">CycleQueue</span><span class="p">)</span> <span class="nf">Push</span><span class="p">(</span><span class="nx">value</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">rearIndex</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="nb">cap</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="o">==</span> <span class="nx">q</span><span class="p">.</span><span class="nx">frontIndex</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;circular queue full&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">q</span><span class="p">.</span><span class="nx">rearIndex</span><span class="p">]</span> <span class="p">=</span> <span class="nx">value</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">rearIndex</span> <span class="p">=</span> <span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">rearIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Pop return queue a front element
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">q</span> <span class="o">*</span><span class="nx">CycleQueue</span><span class="p">)</span> <span class="nf">Pop</span><span class="p">()</span> <span class="kd">interface</span><span class="p">{}</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nx">q</span><span class="p">.</span><span class="nx">rearIndex</span> <span class="o">==</span> <span class="nx">q</span><span class="p">.</span><span class="nx">frontIndex</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+    <span class="nx">v</span> <span class="o">:=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">q</span><span class="p">.</span><span class="nx">frontIndex</span><span class="p">]</span>
+    <span class="nx">q</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">q</span><span class="p">.</span><span class="nx">frontIndex</span><span class="p">]</span> <span class="p">=</span> <span class="kc">nil</span> <span class="c1">// 拿除元素 位置就设置为空
+</span><span class="c1"></span>    <span class="nx">q</span><span class="p">.</span><span class="nx">frontIndex</span> <span class="p">=</span> <span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">frontIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">q</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">v</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>循环队列一般使用空余单元法来解决队空和队满时候都存在<code>font=rear</code>带来的二义性问题，但这样会浪费一个单元。<code>golang</code>的<code>channel</code>中是通过增加<code>qcount</code>字段记录队列长度来解决二义性，一方面不会浪费一个存储单元，另一方面当使用<code>len</code>函数查看队列长度时候，可以直接返回<code>qcount</code>字段，一举两得。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtl2srriq6j60sf0k4tad02.jpg" 
+    alt="对应的源代码" 
+     /></p>
+<p>当我们需要读取的数据的时候直接从<code>recvx</code>指针上的元素取，而写就从<code>sendx</code>位置写入元素，如图：</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtl2nxgw4vj60qo0k0wew02.jpg" 
+    alt="读写指针" 
+     /></p>
+<h2 id="sendq-and-recvq">
+    <a href="#sendq-and-recvq" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    sendq and recvq
+</h2>
+<p>当写入数据的如果缓冲区已经满或者读取的缓冲区已经没有数据的时候，就会发生协程阻塞。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtl38rio4tj60va0u0dj902.jpg" 
+    alt="send" 
+     /></p>
+<p>如果写阻塞的时候会把当前的协程加入到<code>sendq</code>的队列中，直到有一个<code>recvq</code>发起了一个读取的操作，那么写的队列就会被程序唤醒进行工作。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtl3no33luj60qo0k0q3v02.jpg" 
+    alt="全部挂起态" 
+     /></p>
+<p>当缓冲区满了所有的<code>g-w</code>则被加入<code>sendq</code>队列等待<code>g-r</code>有操作就被唤醒<code>g-w</code>，继续工作，这种设计和操作系统的里面<code>thread</code>的<code>5</code>种状态很接近了，可以看出<code>go</code>的设计者在可能参考过操作系统的<code>thread</code>设计。</p>
+<p>当然上面只是我简述整个个过程，实际上<code>go</code>还做了其他细节优化，<code>sendq</code>不为空的时候，并且没有缓冲区，也就是无缓冲区通道，此时会从<code>sendq</code>第一个协程中拿取数据，有兴趣的<code>gopher</code>可以去自己查看源代码，本文也是最近笔者在看到这块源代码的笔记总结。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gu091pmsx9j61bi0hcabs02.jpg" 
+    alt="" 
+     /></p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/golang-memory-escape-analysis/" title="Previous post (older)">
+            <span>Previous</span>
+            Golang Memory Escape Analysis
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/rust-falsework-desgin/" title="Next post (newer)">
+            <span>Next</span>
+            Rust Falsework Desgin
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

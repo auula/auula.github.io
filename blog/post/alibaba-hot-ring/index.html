@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Alibaba Hot Ring Perceive | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Alibaba Hot Ring Perceive | 打码匠"/>
+    <meta itemprop="name" content="Alibaba Hot Ring Perceive | 打码匠" />
+    <meta name="twitter:title" content="Alibaba Hot Ring Perceive | 打码匠" />
+    <meta name="application-name" content="Alibaba Hot Ring Perceive | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:27:07&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:27:07&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Alibaba Hot Ring Perceive",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  123 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Alibaba Hot Ring Perceive</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 1 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h2 id="直奔话题-hotring少说废话">
+    <a href="#%e7%9b%b4%e5%a5%94%e8%af%9d%e9%a2%98-hotring%e5%b0%91%e8%af%b4%e5%ba%9f%e8%af%9d" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    👨‍💻‍：直奔话题 HotRing，少说废话。
+</h2>
+<blockquote>
+<p>去年阿里的<code>Tair</code>团队发表过一篇论文<code>HotRing: A Hotspot-Aware In-Memory Key-Value Store</code>，这篇论文里面讲述了阿里的最快的<code>KV</code>分布式存储引擎核心<code>HotRing</code>的技术与实现，我看了他们的数据显示其引擎吞吐性能可达<code>600M ops/s</code>，这个速度比传统的<code>KVS</code>系统<code>2.58</code>倍的性能提升，于是我就抱着好奇去看看了那篇论文然后就有这篇文章。</p>
+</blockquote>
+<h2 id="-有问题就有故事">
+    <a href="#-%e6%9c%89%e9%97%ae%e9%a2%98%e5%b0%b1%e6%9c%89%e6%95%85%e4%ba%8b" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    👨‍💻‍： 有问题就有故事？
+</h2>
+<p>一个新东西或者技术出现，那就说明老的那套方案技术存在某种缺陷或者满足不了<code>某种</code>的特殊需求了&hellip;&hellip;</p>
+<p>问题动机就是：某一时刻流量上来了，系统扛不住了&hellip;  只要说到高并发，相信这个回答占大多数。<code>HotRing</code>的出现也是这个原因，真的是<code>面向问题编程</code>😜。。。挖槽，真的验证这句话了。。。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiu9ot0gyj60u00j5wg302.jpg" 
+    alt="传统的kvs" 
+     /></p>
+<p>这张图就是传统的<code>kvs</code>架构图，不管你中间的那一层用什么，在某些时刻，缓存系统迎来巨大的访问量（<code>双11秒杀</code>），可能存在<code>访问倾斜</code>(<code>什么？你问我什么是访问倾斜，好吧你不适合编程。😜</code>)，大多数访问集中在极少数数据上（例如<code>微博热点事件</code>）。</p>
+<p>对于集群级别的热点监测倍受重视，如<code>一致性 Hash</code>，某个节点上的数据被读写访问次数远远高出其他节点，对此类行为没有很好的监测到。</p>
+<p>还有单机热问题上没有优化，例如计算机内存的<code>KV</code>存储热点和查询速度没有优化。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiua7v46yj60u00ifgo402.jpg" 
+    alt="存储金字塔" 
+     /></p>
+<p>一个好的存储这些事情都是必须去做的，从上到下，从下到上，每层都在解决一部分问题，总和就是一个大的问题，如果你不能把问题拆成小问题，那你那个问题不一定能解决的好，例如<code>CPU Cache、LevelDB</code>的设计。</p>
+<h2 id="hotring-干了什么">
+    <a href="#hotring-%e5%b9%b2%e4%ba%86%e4%bb%80%e4%b9%88" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    👨‍💻‍：HotRing 干了什么？？？
+</h2>
+<p>现有技术，内存 <code>KVS</code> 对时延要求是很高的，一个在并发中无锁的数据结构尤为重要，然后就是一个能让热点数据能自我跑到最容易访问的地方提高读取速度的。</p>
+<ol>
+<li>热点是动态变化的，如何检测，如何转移?</li>
+</ol>
+<p>这个问题是逃不开的，在<code>HotRing</code>的设计，论文中提到了一个概念就是<code>有序环</code>。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuap7e6rj61780hqdhu02.jpg" 
+    alt="Hotring" 
+     /></p>
+<p>它做了什么？看得懂上图就能看出来，他把传统的<code>Map</code>的底层的存储<code>链表+数组</code>结构换成了一个<code>环形链结构</code>，然后通过<code>head</code>自由的控制指向哪一个节点。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuby6kl8j615a0higmd02.jpg" 
+    alt="head指针" 
+     /></p>
+<p>传统的结构可能你的数据在最后一层或者数据非常多，程序只能通过<code>head</code>顺序查找，时间复杂度<code>O(n)</code></p>
+<p>而环形的结构，避免多次遍历希望把热点数据放在冲突链前面，传统的则需要不断修改节点，需要不断移动节点，必须从头节点开始，到尾节点终止。移动头指针的情况下，会导致一些节点无法被访问。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuch2mb8j60nc06amx902.jpg" 
+    alt="传统" 
+     /></p>
+<p>移动热点不方便，需要把中间节点移动到头节点去，移动链表中的节点很复杂且难以做到无锁并发，就上图这个操作就要3步。</p>
+<p>改成环链，<code>Head</code>可以指向任意节点，即从任意节点开始遍历，然后还能对数据进行排序。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiucst2v1j611g0h6q4o02.jpg" 
+    alt="为什么有序" 
+     /></p>
+<ol start="2">
+<li>为什么有序???</li>
+</ol>
+<p>这个就属于环链的特点了，没有终结点，如果查找值不存在，无法判断何时终结。改成有序的了，可以根据前后项的关系判断是否终结本次查询。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiud5dossj60ls09qt9602.jpg" 
+    alt="推导数学公式" 
+     /></p>
+<ul>
+<li>前驱节点 &lt; 待查找节点 &lt;后驱节点 miss</li>
+<li>前驱节点 &gt; 后驱节点 &amp;&amp; 待查找节点 &lt; 后驱节点 miss</li>
+<li>前驱节点 &gt; 后驱节点  &amp;&amp; 待查找节点 &gt; 前驱节点 miss</li>
+<li>待查找节点 == 节点 K hit</li>
+</ul>
+<p>排序的过程就是利用<code>key</code>排序可以解决这个问题，若目标<code>key</code>介于连续两个<code>item</code>的<code>key</code>之间，说明为<code>read miss</code>操作，即可终止返回。由于实际系统中，数据<code>key</code>的大小通常为<code>10~100B</code>，比较会带来巨大的开销。哈希结构利用<code>tag</code>来减少<code>key</code>的比较开销。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiug961wuj60mj0gc3z102.jpg" 
+    alt="结构图" 
+     /></p>
+<p><code>tag</code>是哈希值的一部分，每个<code>key</code>计算的哈希值，前k位用来哈希表的定位，后n-k位作为冲突链中进一步区分<code>key</code>的标志。为了减小排序开销，我们构建字典序：<code>order = (tag, key)</code>，先根据<code>tag</code>进行排序，<code>tag</code>相同再根据<code>key</code>进行排序。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiufzy0kqj60u00lsac102.jpg" 
+    alt="对比图" 
+     /></p>
+<p>有了这些条件，<code>HotRing</code>就是可控的了。</p>
+<h2 id="热点数据跟踪">
+    <a href="#%e7%83%ad%e7%82%b9%e6%95%b0%e6%8d%ae%e8%b7%9f%e8%b8%aa" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    🔥：热点数据跟踪
+</h2>
+<p>由于在不同的时间里，热点数据都是不停变化的，可能<code>t1-t2</code>这个时间段热的数据可能是在<code>n1</code>节点上，在<code>t</code>段数据后有发生了变化在<code>n2</code>节点上。</p>
+<p><strong>热点识别转移有两种策略：</strong></p>
+<ol>
+<li>
+<p>随机移动策略，效率高、效果可能差（不需要采样、计算，响应速度快），例如第<code>R</code>次访问如果是 <code>Hot Access</code>，保持不变，如果是 <code>Cold Access</code>，移动头指针指向冷数据，在热点集中时非常有效，头指针会趋向于指向热点数据，否则可能会频繁摇摆。</p>
+</li>
+<li>
+<p>统计采样策略，效率低、效果可能更好，索引格式有特殊要求如下图：</p>
+</li>
+</ol>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiudhc8ddj60u00dugmp02.jpg" 
+    alt="内存布局" 
+     /></p>
+<ul>
+<li>针对<code>RCU</code>更新操作的采样优化</li>
+<li>热点继承防止冷启动</li>
+<li>采样分析策略如何选出最优位置</li>
+</ul>
+<p>内存指针分配<code>64bits</code>，<code>address</code> 实际使用了<code>48bits</code>，采样所需的元数据结构上面的图所示，分别在头指针处设置<code>Total Counter</code>，记录该环的访问总次数，每个<code>item</code>设置<code>Counter</code>记录该<code>item</code>的访问次数。因为内存指针需要分配<code>64bits</code>，但实际系统地址索引只使用其中的<code>48bits</code>。我们使用剩余<code>16bits</code>设置标志位(例如<code>Total Counter、Counter</code>等)，保证不会增加额外的元数据开销。该策略的优势是，通过采样分析，可以计算选出最优的头指针位置，稳态时性能表现更优。</p>
+<p><strong>数据采样</strong></p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuds67hfj60f803c3yg02.jpg" 
+    alt="推导公式" 
+     /></p>
+<p>我来解释一下公式，<code>k</code>= 有多少个节点，<code>ni</code>= 当前节点访问频率，<code>N</code>总的访问次数，<code>mod</code>计算出来的内存指针需要移动次数，然后就是<code>概率*访问的成本</code>，然后累加就知道访问得到热点数据的成本，最后就是<code>t</code>就是指针调整到的节点。</p>
+<p><strong>为什么不是直接转移到  <code>max(ni)</code>?</strong></p>
+<p>这个问题显然就是如果你直接调整到热节点位置，那么这个环路上不只是有一个热点数据节点，所有需要使用采用经过公式计算之后的。</p>
+<ul>
+<li>写入密集型的热点：<code>RCU</code></li>
+<li><code>Read</code>读热点、<code>Update</code>写入密集型热点</li>
+<li><code>Less Than 8Bytes -- CAS</code></li>
+<li><code>More Than 8Bytes -- RCU</code></li>
+<li>如果头指针指向的节点被 <code>Update</code>，给前驱节点 <code>Counter + 1</code></li>
+</ul>
+<h2 id="无锁并发访问">
+    <a href="#%e6%97%a0%e9%94%81%e5%b9%b6%e5%8f%91%e8%ae%bf%e9%97%ae" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    🔐：无锁并发访问
+</h2>
+<p><code>Tair</code>的<code>RCU</code>无锁引擎是<code>HotRing</code>的设计基础，因为没有对环形链表结构修改，所以不存在并发问题，可以直接不加锁访问。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiue7lo6lj60tu0uq0u702.jpg" 
+    alt="并发插入时数据丢失问题" 
+     /></p>
+<p>但是在并发插入时数据丢失问题，解决办法就是使用了<code>CompareAndSwap</code>，保证同时只有一个线程能够修改成功。</p>
+<p>什么是<code>CompareAndSwap</code>? 通常会记录下某块内存中的旧值，通过对旧值进行一系列的操作后得到新值，然后通过<code>CAS</code>操作将新值与旧值进行交换。如果这块内存的值在这期间内没被修改过，则旧值会与内存中的数据相同，这时<code>CAS</code>操作将会成功执行 使内存中的数据变为新值。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuf9g8d4j60u009ut9902.jpg" 
+    alt="插入操作" 
+     /></p>
+<p><code>Update</code> 和 <code>Insertion</code> 并发引发的数据丢失，怎么看这个图，假设<code>B</code>为热点数据，程序每次找的<code>B</code>必须经过<code>A</code>，因为<code>A</code>在环路上是在<code>B</code>前面，那么<code>访问B多少次A就是多少次</code>，那么这个不是理想的，那就让<code>hard</code>指针指向<code>A</code>让<code>B</code>之间没有其他的值。</p>
+<p>在链<code>A-&gt;B-&gt;D</code>上，线程<code>1</code>进行插入<code>C</code>的操作，同时线程<code>2</code>进行<code>RCU</code>更新<code>B</code>的操作，尝试更新为<code>B</code>&rsquo;。线程<code>1</code>修改B的指针指向<code>C</code>，完成插入。而线程<code>2</code>修改<code>A</code>的指针指向<code>B</code>'完成更新。两个线程并发修改不同的内存，均可成功返回。但是这时遍历整条链<code>(A-&gt;B'-&gt;D)</code>，将发现<code>C</code>无法被遍历到，导致正确性问题。当线程<code>2</code>更新<code>B</code>时，首先需要将<code>B</code>的<code>Occupied</code>标志位置位。线程<code>1</code>插入<code>C</code>需要修改<code>B</code>的指针(<code>Next Item Address</code>)，若发现<code>Occupied</code>标志位已置位，则需要重新遍历链表，尝试插入，通过使并发操作竞争修改同一内存地址，保证并发操作的正确性，利用相同原理保证了头指针移动操作，与<code>CRUD</code>操作的并发正确性，因此实现了<code>HotRing</code>的无锁并发访问。</p>
+<p><strong>更多细节自己去看论文吧，上面部分总结。</strong></p>
+<h2 id="论文资料">
+    <a href="#%e8%ae%ba%e6%96%87%e8%b5%84%e6%96%99" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    论文资料
+</h2>
+<ul>
+<li><a href="https://www.usenix.org/system/files/fast20-chen_jiqiang.pdf">https://www.usenix.org/system/files/fast20-chen_jiqiang.pdf</a></li>
+</ul>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/compound-data-type-of-rust/" title="Previous post (older)">
+            <span>Previous</span>
+            Compound Data Type of Rust
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/redis-distributed-lock/" title="Next post (newer)">
+            <span>Next</span>
+            Redis Distributed Lock
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

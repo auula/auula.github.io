@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Golang Memory Escape Analysis | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Golang Memory Escape Analysis | 打码匠"/>
+    <meta itemprop="name" content="Golang Memory Escape Analysis | 打码匠" />
+    <meta name="twitter:title" content="Golang Memory Escape Analysis | 打码匠" />
+    <meta name="application-name" content="Golang Memory Escape Analysis | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:07:09&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:07:09&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Golang Memory Escape Analysis",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  433 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Golang Memory Escape Analysis</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 3 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h2 id="前-言">
+    <a href="#%e5%89%8d-%e8%a8%80" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    前 言
+</h2>
+<p>很多时候为了更快的开发效率，大多数程序员都是在使用抽象层级更高的技术，包括语言，框架，设计模式等。所以导致很多程序员包括我自己在内对于底层和基础的知识都会有些生疏和，但是正是这些底层的东西构建了我们熟知的解决方案，同时决定了一个技术人员的上限。</p>
+<p>在写<code>C和C++</code>的时候动态分配内存是让程序员自己手动管理，这样做的好处是，需要申请多少内存空间可以很好的掌握怎么分配，但是如果忘记释放内存，则会导致内存泄漏。</p>
+<p><code>Rust</code>又比👆上面俩门语言分配内存方式显得不同，<code>Rust</code>的内存管理主要特色可以看做是编译器帮你在适当的地方插入<code>delete</code>来释放内存，这样一来你不需要显式指定释放，<code>runtime</code>也不需要任何<code>GC</code>，但是要做到这点，编译器需要能分析出在什么地方<code>delete</code>，这就需要你代码按照其规则来写了。</p>
+<p>相比上面几种的内存管理方式的语言，像<code>Java</code>和<code>Golang</code>在语言设计的时候就加入了<code>garbage collection</code>也就<code>runtime</code>中的<code>gc</code>，让程序员不需要自己管理内存，真正解放了程序员的双手，让我们可以专注于编码。</p>
+<h2 id="函数栈帧">
+    <a href="#%e5%87%bd%e6%95%b0%e6%a0%88%e5%b8%a7" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    函数栈帧
+</h2>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrl5s1bvij30vs0erq5h.jpg" 
+    alt="你的程序怎么跑起来的👆" 
+     /></p>
+<p>当一个函数在运行时，需要为它在堆栈中创建一个栈帧（<code>stack frame</code>）用来记录运行时产生的相关信息，因此每个函数在执行前都会创建一个栈帧，在它返回时会销毁该栈帧。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrl88ooaej30sz0hj75z.jpg" 
+    alt="stack frame准确来说应该是call stack" 
+     /></p>
+<p>通常用一个叫做栈基址（<code>bp</code>）的寄存器来保存正在运行函数栈帧的开始地址，由于栈指针（<code>sp</code>）始终保存的是栈顶的地址，所以栈指针保存的也就是正在运行函数栈帧的结束地址。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrlmmv9i3j30mc0ait94.jpg" 
+    alt="销毁栈帧" 
+     /></p>
+<p>销毁时先把栈指针（<code>sp</code>）移动到此时栈基址（<code>bp</code>）的位置，此时栈指针和栈基址都指向同样的位置。</p>
+<h2 id="go内存逃逸">
+    <a href="#go%e5%86%85%e5%ad%98%e9%80%83%e9%80%b8" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Go内存逃逸
+</h2>
+<p>可以简单得理解成一次函数调用内部申请到的内存，它们会随着函数的返回把内存还给系统。下面来看看一个例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">f</span> <span class="o">:=</span> <span class="nf">foo</span><span class="p">(</span><span class="s">&#34;Ding&#34;</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">bar</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">s</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">foo</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">bar</span> <span class="p">{</span>
+    <span class="nx">f</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">bar</span><span class="p">)</span> <span class="c1">// 这里的new(bar)会不会发生逃逸？？？
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">f</span> <span class="p">=</span> <span class="kc">nil</span>
+    <span class="p">}()</span>
+    <span class="nx">f</span><span class="p">.</span><span class="nx">s</span> <span class="p">=</span> <span class="nx">s</span>
+    <span class="k">return</span> <span class="o">*</span><span class="nx">f</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我想很多人认为发生了逃逸，但是真的是这样的吗？那就用<code>go build -gcflags=-m escape/struct.go</code>看看会输出什么？？？</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrlxhkwgsj30tw0a0wgu.jpg" 
+    alt="escape/struct.go:7:13: f escapes to heap 可以省略" 
+     /></p>
+<p>其实没有发生逃逸，而<code>escape/struct.go:7:13: f escapes to heap</code>的逃逸是因为<code>动态类型逃逸</code>，<code>fmt.Println(a …interface{})</code>在编译期间很难确定其参数的具体类型，也能产生逃逸。</p>
+<p><strong>继续看下面这一个例子：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">f</span> <span class="o">:=</span> <span class="nf">foo</span><span class="p">(</span><span class="s">&#34;Ding&#34;</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">bar</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">s</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">foo</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">bar</span> <span class="p">{</span>
+    <span class="nx">f</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">bar</span><span class="p">)</span> <span class="c1">// 这里的new(bar)会不会发生逃逸？？？
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">f</span> <span class="p">=</span> <span class="kc">nil</span>
+    <span class="p">}()</span>
+    <span class="nx">f</span><span class="p">.</span><span class="nx">s</span> <span class="p">=</span> <span class="nx">s</span>
+    <span class="k">return</span> <span class="nx">f</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>f := new(bar)</code>会发生逃逸吗？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$: go build -gcflags<span class="o">=</span>-m escape/struct.go
+<span class="c1"># command-line-arguments</span>
+escape/struct.go:16:8: can inline foo.func1
+escape/struct.go:7:13: inlining call to fmt.Println
+escape/struct.go:14:10: leaking param: s
+escape/struct.go:15:10: new<span class="o">(</span>bar<span class="o">)</span> escapes to heap ✅
+escape/struct.go:16:8: func literal does not escape
+escape/struct.go:7:13: <span class="o">[]</span>interface <span class="o">{}{</span>...<span class="o">}</span> does not escape
+&lt;autogenerated&gt;:1: .this does not escape
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Go</code>可以返回局部变量指针，这其实是一个典型的变量逃逸案例，虽然在函数 <code>foo()</code> 内部 <code>f</code> 为局部变量，其值通过函数返回值返回，<code>f</code> 本身为一指针，其指向的内存地址不会是栈而是堆，这就是典型的逃逸案例。</p>
+<p><strong>那就继续往下看吧，看看这个例子：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nf">Slice</span><span class="p">()</span> <span class="c1">// ？？？ 会发生逃逸吗？
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">Slice</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">s</span> <span class="p">{</span>
+        <span class="nx">s</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="p">=</span> <span class="nx">index</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>估计很多人会回答<code>没有</code>，其实这里发生逃逸，实际上当栈空间不足以存放当前对象时或无法判断当前切片长度时会将对象分配到堆中。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrmllkb30j30ql0c3ab7.jpg" 
+    alt="发生逃逸" 
+     /></p>
+<p><strong>最后一个例子:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io&#34;</span>
+    <span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nf">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="o">*</span><span class="nf">ReverseA</span><span class="p">(</span><span class="s">&#34;Ding Ding&#34;</span><span class="p">)))</span> <span class="c1">// ???
+</span><span class="c1"></span><span class="p">}</span>
+
+
+<span class="kd">func</span> <span class="nf">Println</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">io</span><span class="p">.</span><span class="nf">WriteString</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span>
+      <span class="nx">str</span><span class="o">+</span><span class="s">&#34;\n&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">ReverseA</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="p">[]</span><span class="kt">rune</span> <span class="p">{</span>
+    <span class="nx">result</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">rune</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span>
+    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="nb">rune</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">v</span> <span class="o">:=</span> <span class="nx">v</span>
+        <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">result</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+        <span class="p">}()</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">result</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrndhtvngj30qq0bsmzw.jpg" 
+    alt="" 
+     /></p>
+<p>如果一个变量被取地址，通过函数返回指针值返回，还有闭包，编译器不确定你的切片容量时，是否要扩容的时候，放到堆上，以致产生逃逸。</p>
+<p><strong>于是我优化了一下代码，再看看</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;io&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">result</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">rune</span><span class="p">(</span><span class="s">&#34;Ding Ding&#34;</span><span class="p">)</span>
+    <span class="nf">ReverseB</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+    <span class="nf">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">ReverseB</span><span class="p">(</span><span class="nx">runes</span> <span class="p">[]</span><span class="kt">rune</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">runes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">j</span><span class="p">;</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span> <span class="p">=</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">j</span><span class="o">-</span><span class="mi">1</span> <span class="p">{</span>
+        <span class="nx">runes</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">runes</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="p">=</span> <span class="nx">runes</span><span class="p">[</span><span class="nx">j</span><span class="p">],</span> <span class="nx">runes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">Println</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">io</span><span class="p">.</span><span class="nf">WriteString</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span>
+      <span class="nx">str</span><span class="o">+</span><span class="s">&#34;\n&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gqrnujc86zj30q80d2tbu.jpg" 
+    alt="str在运行的时候可更改" 
+     /></p>
+<h2 id="如何得知变量是怎么分配">
+    <a href="#%e5%a6%82%e4%bd%95%e5%be%97%e7%9f%a5%e5%8f%98%e9%87%8f%e6%98%af%e6%80%8e%e4%b9%88%e5%88%86%e9%85%8d" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    如何得知变量是怎么分配？
+</h2>
+<blockquote>
+<p>引用<code> (golang.org) FAQ</code>官方说的：</p>
+</blockquote>
+<p>准确地说，你并不需要知道，<code>Golang</code> 中的变量只要被引用就一直会存活，存储在堆上还是栈上由内部实现决定而和具体的语法没有关系。知道变量的存储位置确实和效率编程有关系。如果可能，<code>Golang</code> 编译器会将函数的局部变量分配到函数栈帧（<code>stack frame</code>）上， 然而，如果编译器不能确保变量在函数 <code>return</code>之后不再被引用，编译器就会将变量分配到堆上。而且，如果一个局部变量非常大，那么它也应该被分配到堆上而不是栈上。</p>
+<h2 id="小-结">
+    <a href="#%e5%b0%8f-%e7%bb%93" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    小 结
+</h2>
+<ul>
+<li>逃逸分析的好处是为了减少<code>gc</code>的压力</li>
+<li>栈上分配的内存不需要<code>gc</code>处理</li>
+<li>同步消除，如果你定义的对象的方法上有同步锁，但在运行时，却只有一个线程在访问，此时逃逸分析后的机器码，会去掉同步锁运行。</li>
+</ul>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gu091pmsx9j61bi0hcabs02.jpg" 
+    alt="" 
+     /></p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        
+        
+        <a rel="next" href="/blog/post/golang-channel-desgin/" title="Next post (newer)">
+            <span>Next</span>
+            Golang Channel Desgin
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

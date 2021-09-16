@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Golang Database Reverse Engineering | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Golang Database Reverse Engineering | 打码匠"/>
+    <meta itemprop="name" content="Golang Database Reverse Engineering | 打码匠" />
+    <meta name="twitter:title" content="Golang Database Reverse Engineering | 打码匠" />
+    <meta name="application-name" content="Golang Database Reverse Engineering | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:49:08&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:49:08&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Golang Database Reverse Engineering",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  608 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Golang Database Reverse Engineering</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 3 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <p>相信大家在开发的过程中会去编写一些数据库表对应的<code>model</code>，工作比较重复并且低效，本文将介绍笔者写的一个工具可以根据数据库表生产对应的<code>model</code>逆向工程工具。</p>
+<h2 id="什么是s2s">
+    <a href="#%e4%bb%80%e4%b9%88%e6%98%afs2s" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    什么是s2s？
+</h2>
+<p><code>s2s (sql to structure)</code>是一款命令行数据库逆向工程工具，它可以通过数据库表生成对应的<code>Java</code>、<code>Go</code>、<code>Rust</code>结构体（<code>class</code>），后面将陆续支持更多的语言。</p>
+<h2 id="配置数据库源">
+    <a href="#%e9%85%8d%e7%bd%ae%e6%95%b0%e6%8d%ae%e5%ba%93%e6%ba%90" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    配置数据库源
+</h2>
+<p><code>s2s</code>依赖于你的数据库，所以需要你配置好你的数据库连接信息，以便<code>s2s</code>会正常的运行。配置信息方法很简单你只需要在你的环境变量中加入以下信息即可。</p>
+<p>推荐使用开发环境的下的<code>root</code>用户登录，因为工具需要<code>information_schema</code>表的权限。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#s2s 命令的数据库信息</span>
+<span class="nb">export</span> <span class="nv">s2s_host</span><span class="o">=</span><span class="s2">&#34;127.0.0.1:3306&#34;</span>
+<span class="nb">export</span> <span class="nv">s2s_user</span><span class="o">=</span><span class="s2">&#34;root&#34;</span>
+<span class="nb">export</span> <span class="nv">s2s_pwd</span><span class="o">=</span><span class="s2">&#34;you db password&#34;</span>
+<span class="nb">export</span> <span class="nv">s2s_charset</span><span class="o">=</span><span class="s2">&#34;utf8&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>windows</code>的配置<code>此电脑-&gt;属性-&gt;高级系统设置-&gt;环境变量</code>，<code>Mac</code>和<code>Linux</code>则在<code>~/.profile</code>或者<code>~/.zshrc</code>中添加以上配置信息即可。</p>
+<h2 id="使用方法">
+    <a href="#%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    使用方法
+</h2>
+<ol>
+<li>
+<p>你可以克隆下载本代码库，然后如果你的电脑上已经安装好了<code>go</code>的编译器那么就进入主目录即可使用<code>go build</code>命令编译生成二进制程序文件。</p>
+</li>
+<li>
+<p>如果你觉得麻烦即可在下面列表中找到你对应的平台架构下载对应的二进制可执行文件到电脑上，如果你想在系统上随意调用你则只需要把<code>s2s</code>的安装目录放入你的环境变量中。</p>
+</li>
+<li>
+<p>目前对<code>Rust</code>部分数据类型支持不够友好，不过不耽误使用，目前被生成的数据库表名格式必须为<code>user_info</code>这样的<code>snake case</code>这种格式！！后面会考虑修复这个<code>bug</code>。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows-x64</td>
+<td><a href="https://github.com/higker/s2s/releases/download/v0.0.1/s2s-windows-x64.zip">s2s-windows-x64.zip</a></td>
+</tr>
+<tr>
+<td>Mac-x64</td>
+<td><a href="https://github.com/higker/s2s/releases/download/v0.0.1/s2s-darwin-x64.zip">s2s-darwin-x64.zip</a></td>
+</tr>
+<tr>
+<td>Linux-64</td>
+<td><a href="https://github.com/higker/s2s/releases/download/v0.0.1/s2s-linux-x64.zip">s2s-linux-x64.zip</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="内置命令">
+    <a href="#%e5%86%85%e7%bd%ae%e5%91%bd%e4%bb%a4" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    内置命令
+</h2>
+<p><strong>PS: 在命令行模式下按下<code>tab</code>键会有命令补全提示！</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>使用方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>databases</td>
+<td>显示所有数据库名</td>
+</tr>
+<tr>
+<td>use</td>
+<td>指定使用哪个数据库</td>
+</tr>
+<tr>
+<td>tables</td>
+<td>显示当前数据库所有表</td>
+</tr>
+<tr>
+<td>gen</td>
+<td>生成指定的表，<code>gen 表名</code></td>
+</tr>
+<tr>
+<td>info</td>
+<td>显示数据库所有信息</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出命令行模式</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清理屏幕内容</td>
+</tr>
+</tbody>
+</table>
+<p><strong>使用案例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nl">$:</span><span class="o">&gt;</span> <span class="n">s2s</span> <span class="n">java</span>
+
+	        <span class="n">______</span>
+	<span class="o">.-----.|</span><span class="n">__</span>    <span class="o">|.-----.</span>
+	<span class="o">|</span><span class="n">__</span> <span class="o">--||</span>    <span class="n">__</span><span class="o">||</span><span class="n">__</span> <span class="o">--|</span>
+	<span class="o">|</span><span class="n">_____</span><span class="o">||</span><span class="n">______</span><span class="o">||</span><span class="n">_____</span><span class="o">|</span>
+
+
+
+<span class="err">🥳</span><span class="o">:</span> <span class="n">You</span> <span class="n">have</span> <span class="n">entered</span> <span class="n">the</span> <span class="n">command</span> <span class="n">line</span> <span class="n">mode</span><span class="o">!</span>
+
+<span class="err">🥳</span><span class="o">:</span> <span class="n">Press</span> <span class="n">the</span> <span class="err">&#39;</span><span class="n">tab</span><span class="err">&#39;</span> <span class="n">key</span> <span class="n">to</span> <span class="n">get</span> <span class="n">a</span> <span class="n">prompt</span><span class="err">！</span>
+
+<span class="err">🥳</span><span class="o">:</span> <span class="n">Enter</span> <span class="err">`</span><span class="n">exit</span><span class="err">`</span> <span class="n">to</span> <span class="n">exit</span> <span class="n">the</span> <span class="n">program</span><span class="o">!</span>
+
+<span class="err">😃</span><span class="o">:</span><span class="n">s2s</span><span class="o">&gt;</span><span class="n">databases</span>
+<span class="o">+---+--------------------+</span>
+<span class="o">|</span> <span class="o">*</span> <span class="o">|</span> <span class="n">Database</span>           <span class="o">|</span>
+<span class="o">+---+--------------------+</span>
+<span class="o">|</span> <span class="n">1</span> <span class="o">|</span> <span class="n">information_schema</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">2</span> <span class="o">|</span> <span class="n">emp_db</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">3</span> <span class="o">|</span> <span class="n">mysql</span>              <span class="o">|</span>
+<span class="o">|</span> <span class="n">4</span> <span class="o">|</span> <span class="n">performance_schema</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">5</span> <span class="o">|</span> <span class="n">sys</span>                <span class="o">|</span>
+<span class="o">|</span> <span class="n">6</span> <span class="o">|</span> <span class="n">test_db</span>            <span class="o">|</span>
+<span class="o">+---+--------------------+</span>
+
+
+<span class="err">😃</span><span class="o">:</span><span class="n">s2s</span><span class="o">&gt;</span><span class="n">use</span> <span class="n">emp_db</span>
+
+<span class="err">🤖</span><span class="n">‍</span><span class="o">:</span> <span class="n">Selected</span> <span class="n">as</span> <span class="n">database</span> <span class="err">👉</span> <span class="err">`</span><span class="n">emp_db</span><span class="err">`！</span>
+
+<span class="err">😃</span><span class="o">:</span><span class="n">s2s</span><span class="o">&gt;</span><span class="n">tables</span>
+<span class="o">+---+-----------+</span>
+<span class="o">|</span> <span class="o">*</span> <span class="o">|</span> <span class="n">Tables</span>    <span class="o">|</span>
+<span class="o">+---+-----------+</span>
+<span class="o">|</span> <span class="n">1</span> <span class="o">|</span> <span class="n">user_info</span> <span class="o">|</span>
+<span class="o">+---+-----------+</span>
+
+
+<span class="err">😃</span><span class="o">:</span><span class="n">s2s</span><span class="o">&gt;</span><span class="n">gen</span> <span class="n">user_info</span>
+
+	<span class="kn">package</span> <span class="nn">model</span>
+
+
+	<span class="kn">import</span> <span class="nn">java.sql.Timestamp</span><span class="o">;</span>
+
+	<span class="kn">import</span> <span class="nn">java.math.BigDecimal</span><span class="o">;</span>
+
+	<span class="kn">import</span> <span class="nn">java.math.BigInteger</span><span class="o">;</span>
+
+
+	<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserInfo</span> <span class="o">{</span>
+
+
+      <span class="c1">// 用户账号
+</span><span class="c1"></span>      <span class="kd">private</span> <span class="n">String</span> <span class="n">Account</span><span class="o">;</span>
+
+      <span class="c1">// 用户创建时间
+</span><span class="c1"></span>      <span class="kd">private</span> <span class="n">Timestamp</span> <span class="n">CreateTime</span><span class="o">;</span>
+
+      <span class="c1">// 用户更新时间
+</span><span class="c1"></span>      <span class="kd">private</span> <span class="n">Timestamp</span> <span class="n">UpdatedDate</span><span class="o">;</span>
+
+      <span class="c1">// 用户年龄
+</span><span class="c1"></span>      <span class="kd">private</span> <span class="kt">short</span> <span class="n">Age</span><span class="o">;</span>
+
+      <span class="c1">// 用户余额
+</span><span class="c1"></span>      <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">Money</span><span class="o">;</span>
+
+      <span class="c1">// 用户ID
+</span><span class="c1"></span>      <span class="kd">private</span> <span class="n">BigInteger</span> <span class="n">Uid</span><span class="o">;</span>
+
+
+      <span class="kd">public</span> <span class="n">String</span> <span class="nf">getAccount</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">Account</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">Account</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">Account</span> <span class="o">=</span> <span class="n">Account</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="n">Timestamp</span> <span class="nf">getCreateTime</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">CreateTime</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setCreateTime</span><span class="o">(</span><span class="n">Timestamp</span> <span class="n">CreateTime</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">CreateTime</span> <span class="o">=</span> <span class="n">CreateTime</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="n">Timestamp</span> <span class="nf">getUpdatedDate</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">UpdatedDate</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUpdatedDate</span><span class="o">(</span><span class="n">Timestamp</span> <span class="n">UpdatedDate</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">UpdatedDate</span> <span class="o">=</span> <span class="n">UpdatedDate</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">short</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">Age</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">short</span> <span class="n">Age</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">Age</span> <span class="o">=</span> <span class="n">Age</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="n">BigDecimal</span> <span class="nf">getMoney</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">Money</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setMoney</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">Money</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">Money</span> <span class="o">=</span> <span class="n">Money</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="n">BigInteger</span> <span class="nf">getUid</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">Uid</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUid</span><span class="o">(</span><span class="n">BigInteger</span> <span class="n">Uid</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">this</span><span class="o">.</span><span class="na">Uid</span> <span class="o">=</span> <span class="n">Uid</span><span class="o">;</span>
+      <span class="o">}</span>
+
+
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;user_info{&#34;</span> <span class="o">+</span>
+
+            <span class="s">&#34;Account=&#34;</span> <span class="o">+</span> <span class="n">Account</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span><span class="o">+</span>
+
+            <span class="s">&#34;CreateTime=&#34;</span> <span class="o">+</span> <span class="n">CreateTime</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span><span class="o">+</span>
+
+            <span class="s">&#34;UpdatedData=&#34;</span> <span class="o">+</span> <span class="n">UpdatedDate</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span><span class="o">+</span>
+
+            <span class="s">&#34;Age=&#34;</span> <span class="o">+</span> <span class="n">Age</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span><span class="o">+</span>
+
+            <span class="s">&#34;Money=&#34;</span> <span class="o">+</span> <span class="n">Money</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span><span class="o">+</span>
+
+            <span class="s">&#34;Uid=&#34;</span> <span class="o">+</span> <span class="n">Uid</span> <span class="o">+</span> <span class="s">&#34;,&#34;</span><span class="o">+</span>
+
+            <span class="s">&#34;}&#34;</span><span class="o">;</span>
+      <span class="o">}</span>
+	<span class="o">}</span>
+
+<span class="err">😃</span><span class="o">:</span><span class="n">s2s</span><span class="o">&gt;</span><span class="n">exit</span>
+
+<span class="err">🤖</span><span class="n">‍</span><span class="o">:</span> <span class="n">Bye</span><span class="err">👋</span> <span class="o">:)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="导入包">
+    <a href="#%e5%af%bc%e5%85%a5%e5%8c%85" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    导入包
+</h2>
+<p>本库支持你二次开发使用，你只需要导入本包即可在你的代码中进行扩充开发，但是目前仅支持<code>go</code>语言！</p>
+<ol>
+<li>下载</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">go get -u github.com/higker/s2s
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>导入并且使用</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;github.com/higker/s2s/core/lang/java&#34;</span>
+    <span class="s">&#34;github.com/higker/s2s/core/db&#34;</span>
+<span class="p">)</span>
+
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+      <span class="c1">// 创建一个Java的代码生成器
+</span><span class="c1"></span>      <span class="nx">structure</span> <span class="o">:=</span> <span class="nx">java</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+
+      <span class="c1">// 数据库连接信息
+</span><span class="c1"></span>      <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">structure</span><span class="p">.</span><span class="nf">OpenDB</span><span class="p">(</span>
+            <span class="o">&amp;</span><span class="nx">db</span><span class="p">.</span><span class="nx">Info</span><span class="p">{</span>
+                <span class="nx">HostIPAndPort</span><span class="p">:</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;s2s_host&#34;</span><span class="p">),</span> <span class="c1">// 数据库IP
+</span><span class="c1"></span>                <span class="nx">UserName</span><span class="p">:</span>      <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;s2s_user&#34;</span><span class="p">),</span> <span class="c1">// 数据库用户名
+</span><span class="c1"></span>                <span class="nx">Password</span><span class="p">:</span>      <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;s2s_pwd&#34;</span><span class="p">),</span>  <span class="c1">// 数据库密码
+</span><span class="c1"></span>                <span class="nx">Type</span><span class="p">:</span>          <span class="nx">db</span><span class="p">.</span><span class="nx">MySQL</span><span class="p">,</span>              <span class="c1">// 数据库类型 PostgreSQL Oracle
+</span><span class="c1"></span>                <span class="nx">Charset</span><span class="p">:</span>       <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;s2s_charset&#34;</span><span class="p">),</span>
+            <span class="p">},</span>
+      <span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="c1">// Failed to establish a connection to the database!
+</span><span class="c1"></span>            <span class="c1">// .... logic code
+</span><span class="c1"></span>      <span class="p">}</span>
+
+      <span class="k">defer</span> <span class="nx">structure</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+      <span class="nx">structure</span><span class="p">.</span><span class="nf">SetSchema</span><span class="p">(</span><span class="s">&#34;选择数据库名&#34;</span><span class="p">)</span>
+
+      <span class="c1">// 实现了io.Writer即可
+</span><span class="c1"></span>      <span class="nx">structure</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span><span class="s">&#34;表名&#34;</span><span class="p">)</span>
+
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="其他">
+    <a href="#%e5%85%b6%e4%bb%96" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    其他
+</h2>
+<p>目前仅支持<code>mysql</code>数据库，如果有想贡献代码提<code>issues</code>！跟多需求： 1. 支持<code>linux</code>管道命令这样就可以可编程操作了，前面一个输出就是后面一个程序的输入。</p>
+<ul>
+<li>可以帮忙点一个<code>star</code>✨谢谢！！！</li>
+<li><a href="https://github.com/auula/s2s">https://github.com/auula/s2s</a></li>
+</ul>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/rust-lifetime/" title="Previous post (older)">
+            <span>Previous</span>
+            Rust Lifetime
+            </a>
+        
+        
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

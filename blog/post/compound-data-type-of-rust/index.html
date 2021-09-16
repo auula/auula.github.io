@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Compound Data Type of Rust | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Compound Data Type of Rust | 打码匠"/>
+    <meta itemprop="name" content="Compound Data Type of Rust | 打码匠" />
+    <meta name="twitter:title" content="Compound Data Type of Rust | 打码匠" />
+    <meta name="application-name" content="Compound Data Type of Rust | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:25:30&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:25:30&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Compound Data Type of Rust",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  259 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Compound Data Type of Rust</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 2 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h2 id="概-述">
+    <a href="#%e6%a6%82-%e8%bf%b0" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    概 述
+</h2>
+<blockquote>
+<p>好久没有更新<code>rust</code>相关的内容了，更新一波<code>Rust</code>的内容，本篇讲介绍一下<code>Rust</code>中的复合数据类型。</p>
+</blockquote>
+<h2 id="composite-type">
+    <a href="#composite-type" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Composite Type
+</h2>
+<p><code>复合数据类型</code>是一种数据类型，它可以原始的基本数据类型和其它的复合类型所构成， 构成一个复合类型的动作，又称作组合。</p>
+<p>本文讲介绍一下在<code>Rust</code>中有<code>tuple</code>、<code>array</code>、<code>struct</code>、<code>enum</code>几个复合类型。</p>
+<h2 id="tuple">
+    <a href="#tuple" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    tuple
+</h2>
+<p><code>tuple</code>即<code>元组</code>，元组类型是由多个不同类型的元素组成的复合类型，通过<code>()</code>小括号把元素组织在一起成一个新的数据类型。元组的长度在定义的时候就已经是固定的了，不能修改，如果指定了元素的数据类型，那么你的元素就要对号入座！！！否则编译器会教训你！</p>
+<p><strong>例子：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 指定数据类型
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">tup_type</span>:<span class="p">(</span><span class="kt">i8</span><span class="p">,</span><span class="kt">i32</span><span class="p">,</span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="o">-</span><span class="mi">1024</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 解构元素
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">one</span><span class="p">,</span><span class="n">two</span><span class="p">,</span><span class="n">three</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tup_type</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 二维的元组
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">tup_2d</span>:<span class="p">(</span><span class="kt">f64</span><span class="p">,(</span><span class="kt">i8</span><span class="p">,</span><span class="kt">i32</span><span class="p">,</span><span class="kt">bool</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">3.1415927</span><span class="p">,(</span><span class="n">one</span><span class="p">,</span><span class="n">two</span><span class="p">,</span><span class="n">three</span><span class="p">));</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;tup_2d = {:?}&#34;</span><span class="p">,</span><span class="n">tup_2d</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 索引
+</span><span class="c1"></span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;π = {:?}&#34;</span><span class="p">,</span><span class="n">tup_2d</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>元组的访问方式有好几种，通过下标去访问，也可以使用解构赋值给新的变量去访问，但是不支持迭代器去访问。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">for</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">tup_2d</span><span class="p">.</span><span class="mf">1.</span><span class="n">iter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{}&#34;</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">   Compiling playground v0.0.1 <span class="o">(</span>/playground<span class="o">)</span>
+error<span class="o">[</span>E0599<span class="o">]</span>: no method named <span class="sb">`</span>iter<span class="sb">`</span> found <span class="k">for</span> tuple <span class="sb">`</span><span class="o">(</span>i8, i32, bool<span class="o">)</span><span class="sb">`</span> in the current scope
+  --&gt; src/main.rs:10:23
+   <span class="p">|</span>
+<span class="m">10</span> <span class="p">|</span>     <span class="k">for</span> v in tup_type.iter<span class="o">()</span> <span class="o">{</span>
+   <span class="p">|</span>                       ^^^^ method not found in <span class="sb">`</span><span class="o">(</span>i8, i32, bool<span class="o">)</span><span class="sb">`</span>
+
+error: aborting due to previous error
+
+For more information about this error, try <span class="sb">`</span>rustc --explain E0599<span class="sb">`</span>.
+error: could not compile <span class="sb">`</span>playground<span class="sb">`</span>
+
+To learn more, run the <span class="nb">command</span> again with --verbose.
+</code></pre></td></tr></table>
+</div>
+</div><p><code>元组</code>的每个元素的类型可以不同，因此您无法对其进行迭代。元组甚至不能保证以与类型定义相同的顺序存储数据，因此即使您自己为它们实现<code>Iterator</code>，它们也不适合进行有效的迭代。</p>
+<p>但是如果元素是支持实现了<code>Iterator</code>就可以通过<code>.iter()</code>进行迭代访问。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">arrays</span>:<span class="p">[</span><span class="kt">usize</span><span class="p">;</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="mi">5</span><span class="p">];</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="p">..</span><span class="mi">5</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">arrays</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="n">arrays</span><span class="p">);</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">tup_arr</span>:<span class="p">(</span><span class="o">&amp;</span><span class="kt">str</span><span class="p">,[</span><span class="kt">usize</span><span class="p">;</span><span class="mi">5</span><span class="p">])</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="s">&#34;tup_arr&#34;</span><span class="p">,</span><span class="n">arrays</span><span class="p">);</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="n">tup_arr</span><span class="p">);</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">tup_arr</span><span class="p">.</span><span class="mf">1.</span><span class="n">iter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{}&#34;</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>例如上的元素是一个<code>array</code>，<code>Rust</code>中的数组和其他语言一样，一组类型相同的元素组成的复合类型，数组在底层存储是一块连续的内存空间。</p>
+<h2 id="array">
+    <a href="#array" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    array
+</h2>
+<p><code>Rust</code>中的数组声明是<code>[T;n]</code>进行的，<code>T</code>是元素类型，<code>n</code>是这组元素有多少个坑位，创建的时候可以去掉类型和大小，程序会自动推断出来。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="w">    </span><span class="c1">// 数组
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">arr</span>:<span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.2</span><span class="p">,</span><span class="mf">3.33</span><span class="p">];</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="n">arr</span><span class="p">);</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 类型自动推导
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">arr_infer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&#34;Hello&#34;</span><span class="p">,</span><span class="s">&#34;,&#34;</span><span class="p">,</span><span class="s">&#34;World!&#34;</span><span class="p">];</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="kt">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">new</span><span class="p">();</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 迭代器
+</span><span class="c1"></span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">arr_infer</span><span class="p">.</span><span class="n">iter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="kt">str</span><span class="p">.</span><span class="n">push_str</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;str = {}&#34;</span><span class="p">,</span><span class="kt">str</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=195d35086371375f182fc67922d81b44">点击查看元组代码案例</a></p>
+<h2 id="enum">
+    <a href="#enum" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    enum
+</h2>
+<p>枚举类型，如果你之前从事过<code>Java</code>相关的开发应该不陌生，在<code>Rust</code>里面也有<code>枚举</code>类型，枚举类型是一个自定义数据类型，通过<code>enum</code>关键字来声明，<code>body</code>里面可以包含多个自定义的枚举值，枚举可以用来限制某个值或者类型范围。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="w">    </span><span class="cp">#[derive(Debug)]</span><span class="w">
+</span><span class="w">    </span><span class="k">enum</span> <span class="nc">Gender</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">Boy</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="n">Girl</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>上面就定义一了个类型名字为<code>Gender</code>的枚举，<code>Boy</code>和<code>Girl</code>是枚举可供使用的值，<code>#[derive(Debug)]</code>注释是让<code>Gender</code>自动实现<code>Debug tarit</code>后面文章将深入。</p>
+<h2 id="struct">
+    <a href="#struct" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    struct
+</h2>
+<p>结构体可以把一些自定义的数据类型通过已有的类型组装成一个新的自定义数据类型，通过<code>struct</code>关键字就可以创建一个结构体，结构体字段格式<code>name:type</code>，<code>name</code>是结构体字段名，<code>type</code>是字段的类型，默认是不可变的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 枚举现在取值范围
+</span><span class="c1"></span><span class="w">    </span><span class="cp">#[derive(Debug)]</span><span class="w">
+</span><span class="w">    </span><span class="k">enum</span> <span class="nc">Gender</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">Boy</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="n">Girl</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 定义一个结构体
+</span><span class="c1"></span><span class="w">    </span><span class="cp">#[derive(Debug)]</span><span class="w">
+</span><span class="w">    </span><span class="k">struct</span> <span class="nc">Programmer</span><span class="o">&lt;</span><span class="na">&#39;skill</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">name</span>: <span class="nb">String</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="n">skill</span>: <span class="p">[</span><span class="o">&amp;</span><span class="na">&#39;skill</span><span class="w"> </span><span class="kt">str</span><span class="p">;</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w">
+</span><span class="w">        </span><span class="n">sex</span>: <span class="nc">Gender</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 创建一个实例
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Programmer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">name</span>: <span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;Jaco Ding&#34;</span><span class="p">),</span><span class="w"> </span><span class="c1">// String类型内容可变
+</span><span class="c1"></span><span class="w">        </span><span class="n">skill</span>: <span class="p">[</span><span class="s">&#34;Java&#34;</span><span class="p">,</span><span class="s">&#34;Go&#34;</span><span class="p">,</span><span class="s">&#34;Rust&#34;</span><span class="p">],</span><span class="w"> </span><span class="c1">// 一个长度为3的字符串面量类型的数组
+</span><span class="c1"></span><span class="w">        </span><span class="n">sex</span>:<span class="nc">Gender</span>::<span class="n">Boy</span><span class="p">,</span><span class="w"> </span><span class="c1">// 通过枚举限制参数类型
+</span><span class="c1"></span><span class="w">    </span><span class="p">};</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;engineer = {:?}&#34;</span><span class="p">,</span><span class="n">engineer</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>有了自定义的类型了也就是<code>struct</code>就可以通过自定义的类型来处理一些特殊的需求了，例如下面的代码定义了一个元素类型为<code>Programmer</code>长度为<code>2</code>的数组。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">Doris</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Programmer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">name</span>: <span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;Doris&#34;</span><span class="p">),</span><span class="w">
+</span><span class="w">        </span><span class="n">skill</span>: <span class="p">[</span><span class="s">&#34;Vue&#34;</span><span class="p">,</span><span class="s">&#34;TypeScript&#34;</span><span class="p">,</span><span class="s">&#34;JavaScript&#34;</span><span class="p">],</span><span class="w">
+</span><span class="w">        </span><span class="n">sex</span>:<span class="nc">Gender</span>::<span class="n">Girl</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">};</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">Jaco</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Programmer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">name</span>: <span class="nb">String</span>::<span class="n">from</span><span class="p">(</span><span class="s">&#34;Jaco&#34;</span><span class="p">),</span><span class="w">
+</span><span class="w">        </span><span class="n">skill</span>: <span class="p">[</span><span class="s">&#34;Java&#34;</span><span class="p">,</span><span class="s">&#34;Go&#34;</span><span class="p">,</span><span class="s">&#34;Rust&#34;</span><span class="p">],</span><span class="w">
+</span><span class="w">        </span><span class="n">sex</span>:<span class="nc">Gender</span>::<span class="n">Boy</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">};</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">employees</span>:<span class="p">[</span><span class="n">Programmer</span><span class="p">;</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">Doris</span><span class="p">,</span><span class="n">Jaco</span><span class="p">];</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">employees</span><span class="p">.</span><span class="n">iter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="n">e</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>结构体<code>Programmer</code>上的<code>&lt;'skill&gt;</code> 解决<code>skill</code>数组的生命周期问题<code>undeclared lifetime</code>，所有权问题，所有权是<code>Rust</code>语言核心的知识点，这些在后面文章中慢慢更新。</p>
+<h2 id="小结">
+    <a href="#%e5%b0%8f%e7%bb%93" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    小结
+</h2>
+<p><code>Rust</code>中的结构体还有两种特殊结构：<code>元组结构体</code>、<code>单结构体</code>，枚举也有<code>带有参数</code>的枚举。。。本文就学习总结了一下常见复合类型的使用，未深入。</p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/rust-falsework-desgin/" title="Previous post (older)">
+            <span>Previous</span>
+            Rust Falsework Desgin
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/alibaba-hot-ring/" title="Next post (newer)">
+            <span>Next</span>
+            Alibaba Hot Ring Perceive
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

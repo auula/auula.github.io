@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Golang Web Session Implement | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Golang Web Session Implement | 打码匠"/>
+    <meta itemprop="name" content="Golang Web Session Implement | 打码匠" />
+    <meta name="twitter:title" content="Golang Web Session Implement | 打码匠" />
+    <meta name="application-name" content="Golang Web Session Implement | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:41:38&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:41:38&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Golang Web Session Implement",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  1409 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Golang Web Session Implement</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 7 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h2 id="概-述">
+    <a href="#%e6%a6%82-%e8%bf%b0" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    概 述
+</h2>
+<p>大家都知道 <code>session</code> 是<code>web应用</code>在服务器端实现的一种用户和服务器之间认证的解决方案，目前 <code>Go</code> 标准包没有为 <code>session</code> 提供任何支持，本文我将讲解<code>session</code>的实现原理，和一些常见基于<code>session</code>安全产生的防御问题。</p>
+<p>当然有人可能看了会抬杠，说现在大部分不是前后端分离架构吗？对，你可以使用<code>JWT</code>解决你的问题。但是也有一些一体化<code>web</code>应用需要<code>session</code>，所以我准备造个轮子。自己造的轮子哪里出问题了，比别人更熟悉，有<code>bug</code>了，还不用求着别人修<code>bug</code>,自己修就好了，呵呵哈哈哈，当然这几句话有点皮😜。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1goyrvcs0n1j307q04zaa0.jpg" 
+    alt="嘤 嘤 嘤&amp;hellip;" 
+     /></p>
+<h2 id="需-求">
+    <a href="#%e9%9c%80-%e6%b1%82" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    需 求
+</h2>
+<p>我觉得一名好的程序员，在写程序之前应该列一下需求分析，整理一下思路，然后再去写代码。</p>
+<ul>
+<li>支持内存存储会话数据</li>
+<li>支持分布式<code>redis</code>会话存储</li>
+<li>会话如果有心跳就自动续命<code>30</code>分钟（生命周期）</li>
+<li>提供防御：<code>中间人</code>，<code>会话劫持</code>，<code>会话重放</code>等攻击</li>
+</ul>
+<h2 id="工作原理">
+    <a href="#%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    工作原理
+</h2>
+<p>首先必须了解工作原理才能写代码，这里我就稍微说一下，<code>session</code>是基于<code>cookie</code>实现的，一个<code>session</code>对应一个<code>uuid</code>也是<code>sessionid</code>，在服务器创建一个相关的数据结构，然后把这个<code>sessionid</code>通过<code>cookie</code>让浏览器保存着，下次浏览器请求过来了就会有<code>sessionid</code>，然后通过<code>sessionid</code>获取这个会话的数据。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1goyr6owhr0j30gw0c23z5.jpg" 
+    alt="请求过程" 
+     /></p>
+<h2 id="代码实现">
+    <a href="#%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    代码实现
+</h2>
+<p>都是说着容易，实际写起来就是各种坑，不过我还是实现了。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1goyrnh2ebmj30dc07j3yk.jpg" 
+    alt="linus 🖕" 
+     /></p>
+<p><strong>少说废话，还是直接干代码吧。</strong></p>
+<ol>
+<li>依赖关系</li>
+</ol>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1goysgg2puij30hz0dz3ys.jpg" 
+    alt="依赖关系" 
+     /></p>
+<p>上面是设计的相关依赖关系图，<code>session</code>是一个独立的结构体，
+<code>GlobalManager</code>是整体的会话管理器负责数据持久化，过期会话垃圾回收工作♻️，<code>storage</code>是存储器接口，因为我们要实现两种方式存储会话数据或者以后要增加其他持久化存储，所以必须需要接口抽象支持，<code>memory</code>和<code>redis</code>是存储的具体实现。</p>
+<ol start="2">
+<li><code>storage</code>接口</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">sessionx</span>
+
+<span class="c1">// session storage interface
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">storage</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="nf">Read</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span>
+    <span class="nf">Create</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span>
+    <span class="nf">Update</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span>
+    <span class="nf">Remove</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>storage</code>就9行代码，是具体的会话数据操作动作的抽象，全部参数使用的是<code>session</code>这个结构的指针，如果处理异常了就<code>即错即返回</code>。</p>
+<p>为什么把函数签名的<code>形参</code>使用指针类型的，这个我想看的懂人应该知道这是为什么了😁</p>
+<ol start="3">
+<li><code>memoryStore</code>结构体</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">memoryStore</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">sync</span><span class="p">.</span><span class="nx">Map</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>memoryStore</code>结构体里面就嵌入<code>sync.Map</code>结构体，一开始是使用的<code>map</code>这种，但是后面发现在并发读写然后加<code>sync.Mutex</code>锁🔐，性能还不如直接使用<code>sync.Map</code>速度快。<code>sync.Map</code>用来做<code>K:V</code>存储的，也就是<code>sessionid</code>对应<code>session data</code>的。</p>
+<p>实现<code>storage</code>具体方法如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">memoryStore</span><span class="p">)</span> <span class="nf">Read</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nx">ele</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">m</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
+      <span class="c1">// bug 这个不能直接 s = ele 
+</span><span class="c1"></span>      <span class="nx">s</span><span class="p">.</span><span class="nx">Data</span> <span class="p">=</span> <span class="nx">ele</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">Data</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+    <span class="c1">// s = nil
+</span><span class="c1"></span>    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;id `%s` not exist session data&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>读取数据的时候先将持久化的数据读出来然后赋值给本次会话的<code>session</code>。</p>
+<p><strong>注意:</strong> 在go的<code>map</code>中的<code>struct</code>中的字段不能够直接寻址，官方<strong>issue</strong> <a href="https://github.com/golang/go/issues/3117">https://github.com/golang/go/issues/3117</a></p>
+<p>其他几个函数:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">memoryStore</span><span class="p">)</span> <span class="nf">Create</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+      <span class="nx">m</span><span class="p">.</span><span class="nf">Store</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">memoryStore</span><span class="p">)</span> <span class="nf">Remove</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+      <span class="nx">m</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+      <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">memoryStore</span><span class="p">)</span> <span class="nf">Update</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="nx">ele</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">m</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
+        <span class="c1">// 为什么是交换data 因为我们不确定上层是否扩容换了地址
+</span><span class="c1"></span>        <span class="nx">ele</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">Data</span> <span class="p">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Data</span>
+        <span class="nx">ele</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Expires</span>
+        <span class="c1">//m.sessions[s.ID] = ele
+</span><span class="c1"></span>        <span class="k">return</span> <span class="kc">nil</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;id `%s` updated session fail&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这句话代码没有什么好说的，写过<code>go</code>都能看得懂。</p>
+<p>垃圾回收:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">memoryStore</span><span class="p">)</span> <span class="nf">gc</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// recycle your trash every 10 minutes
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">{</span>
+        <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="nx">m</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">bool</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="nx">value</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">Expires</span><span class="p">.</span><span class="nf">UnixNano</span><span class="p">()</span> <span class="p">{</span>
+              <span class="nx">m</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="p">})</span>
+        <span class="nx">runtime</span><span class="p">.</span><span class="nf">GC</span><span class="p">()</span>
+        <span class="c1">// log.Println(&#34;gc running...&#34;)
+</span><span class="c1"></span>    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>比较会话过期时间，过期就删除会话，以上就是内存存储的实现。</p>
+<ol start="4">
+<li><code>redisStore</code>结构体</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">redisStore</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+    <span class="nx">sessions</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">rs</span> <span class="o">*</span><span class="nx">redisStore</span><span class="p">)</span> <span class="nf">Read</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="nx">sid</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s&#34;</span><span class="p">,</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">RedisKeyPrefix</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+    <span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">sessions</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">sid</span><span class="p">).</span><span class="nf">Bytes</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">sessions</span><span class="p">.</span><span class="nf">Expire</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">sid</span><span class="p">,</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TimeOut</span><span class="p">).</span><span class="nf">Err</span><span class="p">();</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">decoder</span><span class="p">(</span><span class="nx">bytes</span><span class="p">,</span> <span class="nx">s</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="c1">// log.Println(&#34;redis read:&#34;, s)
+</span><span class="c1"></span>    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">rs</span> <span class="o">*</span><span class="nx">redisStore</span><span class="p">)</span> <span class="nf">Create</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">rs</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">rs</span> <span class="o">*</span><span class="nx">redisStore</span><span class="p">)</span> <span class="nf">Update</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">rs</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">rs</span> <span class="o">*</span><span class="nx">redisStore</span><span class="p">)</span> <span class="nf">Remove</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">sessions</span><span class="p">.</span><span class="nf">Del</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s&#34;</span><span class="p">,</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">RedisKeyPrefix</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">)).</span><span class="nf">Err</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">rs</span> <span class="o">*</span><span class="nx">redisStore</span><span class="p">)</span> <span class="nf">setValue</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">encoder</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="nx">err</span> <span class="p">=</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">sessions</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s&#34;</span><span class="p">,</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">RedisKeyPrefix</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">),</span> <span class="nx">bytes</span><span class="p">,</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TimeOut</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">err</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>代码也就50行左右，很简单就是通过<code>redis</code>客户端对数据进行持久化操作，把本地的会话数据提供<code>encoding/gob</code>序列化成二进制写到<code>redis</code>服务器上存储，需要的时候再反序列化出来。</p>
+<p><strong>那么问题来了，会有人问了，redis没有并发问题吗？</strong></p>
+<p>👨‍💻‍： 那我肯定会回答，你在问这个问题之前我不知道你有没有了解过<code>redis</code>？？？</p>
+<p><code>Redis</code> 并发竞争指的是多个 <code>Redis</code> 客户端同时 <code>set key </code>引起的并发问题，<code>Redis</code> 是一种单线程机制的 <code>NoSQL</code> 数据库，所以 <code>Redis</code> 本身并没有锁的概念。</p>
+<p>但是多客户端同时并发写同一个 <code>key</code>，一个 <code>key</code> 的值是 <code>1</code>，本来按顺序修改为 <code>2,3,4</code> ，最后 <code>key</code> 值是 <code>4</code>，但是因为并发去写 <code>key</code>，顺序可能就变成了 <code>4,3,2</code>，最后 <code>key</code> 值就变成了 <code>2</code>。</p>
+<p>我这个库当前也就一个客户端，如果你部署到多个机子，那就使用 <code>setnx(key, value)</code> 来实现分布式锁，我当前写的这个库没有提供分布式锁，具体请自行<code>google</code>。</p>
+<ol start="5">
+<li><code>manager</code>结构体</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">storeType</span> <span class="kt">uint8</span>
+
+<span class="kd">const</span> <span class="p">(</span>
+    <span class="c1">// memoryStore store type
+</span><span class="c1"></span>    <span class="nx">M</span> <span class="nx">storeType</span> <span class="p">=</span> <span class="kc">iota</span>
+    <span class="c1">// redis store type
+</span><span class="c1"></span>    <span class="nx">R</span>
+    <span class="nx">SessionKey</span> <span class="p">=</span> <span class="s">&#34;session-id&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// manager for session manager
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">manager</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">cfg</span>   <span class="o">*</span><span class="nx">Configs</span>
+    <span class="nx">store</span> <span class="nx">storage</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">New</span><span class="p">(</span><span class="nx">t</span> <span class="nx">storeType</span><span class="p">,</span> <span class="nx">cfg</span> <span class="o">*</span><span class="nx">Configs</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="nx">t</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">M</span><span class="p">:</span>
+        <span class="c1">// init memory storage
+</span><span class="c1"></span>        <span class="nx">m</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">memoryStore</span><span class="p">)</span>
+        <span class="k">go</span> <span class="nx">m</span><span class="p">.</span><span class="nf">gc</span><span class="p">()</span>
+        <span class="nx">mgr</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">manager</span><span class="p">{</span><span class="nx">cfg</span><span class="p">:</span> <span class="nx">cfg</span><span class="p">,</span> <span class="nx">store</span><span class="p">:</span> <span class="nx">m</span><span class="p">}</span>
+    <span class="k">case</span> <span class="nx">R</span><span class="p">:</span>
+        <span class="c1">// parameter verify
+</span><span class="c1"></span>        <span class="nx">validate</span> <span class="o">:=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">cfg</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+        <span class="p">}</span>
+
+        <span class="c1">// init redis storage
+</span><span class="c1"></span>        <span class="nx">r</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">redisStore</span><span class="p">)</span>
+        <span class="nx">r</span><span class="p">.</span><span class="nx">sessions</span> <span class="p">=</span> <span class="nx">redis</span><span class="p">.</span><span class="nf">NewClient</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Options</span><span class="p">{</span>
+            <span class="nx">Addr</span><span class="p">:</span>     <span class="nx">cfg</span><span class="p">.</span><span class="nx">RedisAddr</span><span class="p">,</span>
+            <span class="nx">Password</span><span class="p">:</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">RedisPassword</span><span class="p">,</span> <span class="c1">// no password set
+</span><span class="c1"></span>            <span class="nx">DB</span><span class="p">:</span>       <span class="nx">cfg</span><span class="p">.</span><span class="nx">RedisDB</span><span class="p">,</span>       <span class="c1">// use default DB
+</span><span class="c1"></span>            <span class="nx">PoolSize</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">PoolSize</span><span class="p">),</span> <span class="c1">// connection pool size
+</span><span class="c1"></span>        <span class="p">})</span>
+
+        <span class="c1">// test connection
+</span><span class="c1"></span>        <span class="nx">timeout</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="mi">8</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+        <span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">sessions</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">timeout</span><span class="p">).</span><span class="nf">Err</span><span class="p">();</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+        <span class="p">}</span>
+        <span class="nx">mgr</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">manager</span><span class="p">{</span><span class="nx">cfg</span><span class="p">:</span> <span class="nx">cfg</span><span class="p">,</span> <span class="nx">store</span><span class="p">:</span> <span class="nx">r</span><span class="p">}</span>
+
+    <span class="k">default</span><span class="p">:</span>
+      <span class="nb">panic</span><span class="p">(</span><span class="s">&#34;not implement store type&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>manager</code>结构体也就两个字段，一个存放我们全局配置信息，一个我们实例化不同的持久化存储的存储器，其他代码就是辅助性的代码，不细说了。</p>
+<ol start="6">
+<li><code>Session</code>结构体</li>
+</ol>
+<p>这个结构体是对应着浏览器会话的结构体，设计原则是一个<code>id</code>对应一个<code>session</code>结构体。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Session</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="c1">// 会话ID
+</span><span class="c1"></span>    <span class="nx">ID</span> <span class="kt">string</span>
+    <span class="c1">// session超时时间
+</span><span class="c1"></span>    <span class="nx">Expires</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+    <span class="c1">// 存储数据的map
+</span><span class="c1"></span>    <span class="nx">Data</span> <span class="kd">map</span><span class="p">[</span><span class="kd">interface</span><span class="p">{}]</span><span class="kd">interface</span><span class="p">{}</span>
+    <span class="nx">_w</span>   <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span>
+    <span class="c1">// 每个session对应一个cookie
+</span><span class="c1"></span>    <span class="nx">Cookie</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>具体操作函数:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Get Retrieves the stored element data from the session via the key
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="nf">Get</span><span class="p">(</span><span class="nx">key</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="nx">s</span><span class="p">.</span><span class="nf">refreshCookie</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">ele</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span> <span class="nx">ok</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">ele</span><span class="p">,</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;key &#39;%s&#39; does not exist&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Set Stores information in the session
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="nf">Set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
+
+    <span class="nx">lock</span><span class="p">[</span><span class="s">&#34;W&#34;</span><span class="p">](</span><span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Data</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+          <span class="nx">s</span><span class="p">.</span><span class="nx">Data</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kd">interface</span><span class="p">{}]</span><span class="kd">interface</span><span class="p">{},</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nx">s</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="p">=</span> <span class="nx">v</span>
+    <span class="p">})</span>
+
+	  <span class="nx">s</span><span class="p">.</span><span class="nf">refreshCookie</span><span class="p">()</span>
+	  <span class="k">return</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Remove an element stored in the session
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="nf">Remove</span><span class="p">(</span><span class="nx">key</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
+	  <span class="nx">s</span><span class="p">.</span><span class="nf">refreshCookie</span><span class="p">()</span>
+
+    <span class="nx">lock</span><span class="p">[</span><span class="s">&#34;R&#34;</span><span class="p">](</span><span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nb">delete</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">Data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+    <span class="p">})</span>
+
+	  <span class="k">return</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Clean up all data for this session
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="nf">Clean</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="nx">s</span><span class="p">.</span><span class="nf">refreshCookie</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 刷新cookie 会话只要有操作就重置会话生命周期
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="nf">refreshCookie</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">s</span><span class="p">.</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TimeOut</span><span class="p">)</span>
+    <span class="nx">s</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Expires</span>
+    <span class="c1">// 这里不是使用指针
+</span><span class="c1"></span>    <span class="c1">// 因为这里我们支持redis 如果web服务器重启了
+</span><span class="c1"></span>    <span class="c1">// 那么session数据在内存里清空
+</span><span class="c1"></span>    <span class="c1">// 从redis读取的数据反序列化地址和重新启动的不一样
+</span><span class="c1"></span>    <span class="c1">// 所有直接数据拷贝
+</span><span class="c1"></span>    <span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">_w</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面是几个函数是，会话的数据操作函数，<code>refreshCookie()</code>是用来刷新浏览器<code>cookie</code>信息的，因为我在设计的时候只有浏览器有心跳也就是有操作数据的时候，管理器就默认为这个浏览器会话还是活着的，会自动同步更新<code>cookie</code>过期时间，这个更新过程可不是光刷新<code>cookie</code>就完事的了，持久化的话的数据过期时间也一样更新了。</p>
+<p><strong>Handler方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Handler Get session data from the Request
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Handler</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">req</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="o">*</span><span class="nx">Session</span> <span class="p">{</span>
+    <span class="c1">// 从请求里面取session
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">session</span> <span class="nx">Session</span>
+    <span class="nx">session</span><span class="p">.</span><span class="nx">_w</span> <span class="p">=</span> <span class="nx">w</span>
+    <span class="nx">cookie</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">req</span><span class="p">.</span><span class="nf">Cookie</span><span class="p">(</span><span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="o">||</span> <span class="nx">cookie</span> <span class="o">==</span> <span class="kc">nil</span> <span class="o">||</span> <span class="nb">len</span><span class="p">(</span><span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">createSession</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">cookie</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">session</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// ID通过编码之后长度是73位
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">73</span> <span class="p">{</span>
+        <span class="nx">session</span><span class="p">.</span><span class="nx">ID</span> <span class="p">=</span> <span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span>
+        <span class="k">if</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">session</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nf">createSession</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">cookie</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">session</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 防止web服务器重启之后redis会话数据还在
+</span><span class="c1"></span>        <span class="c1">// 但是浏览器cookie没有更新
+</span><span class="c1"></span>        <span class="c1">// 重新刷新cookie
+</span><span class="c1"></span>
+        <span class="c1">// 存在指针一致问题，这样操作还是一块内存，所有我们需要复制副本
+</span><span class="c1"></span>        <span class="nx">_</span> <span class="p">=</span> <span class="nx">session</span><span class="p">.</span><span class="nb">copy</span><span class="p">(</span><span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">)</span>
+        <span class="nx">session</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Value</span> <span class="p">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">ID</span>
+        <span class="nx">session</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">Expires</span>
+        <span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">session</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">)</span>
+	    <span class="p">}</span>
+      <span class="c1">// 地址一样不行！！！
+</span><span class="c1"></span>      <span class="c1">// log.Printf(&#34;mgr.cfg.Cookie pointer:%p \n&#34;, mgr.cfg.Cookie)
+</span><span class="c1"></span>      <span class="c1">// log.Printf(&#34;session.cookie pointer:%p \n&#34;, session.Cookie)
+</span><span class="c1"></span>      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">session</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">createSession</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">cookie</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">,</span> <span class="nx">session</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="o">*</span><span class="nx">Session</span> <span class="p">{</span>
+      <span class="c1">// init session parameter
+</span><span class="c1"></span>      <span class="nx">session</span><span class="p">.</span><span class="nx">ID</span> <span class="p">=</span> <span class="nf">generateUUID</span><span class="p">()</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TimeOut</span><span class="p">)</span>
+      <span class="nx">_</span> <span class="p">=</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span>
+
+      <span class="c1">// 重置配置cookie模板
+</span><span class="c1"></span>      <span class="nx">session</span><span class="p">.</span><span class="nb">copy</span><span class="p">(</span><span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">)</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Value</span> <span class="p">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">ID</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">Expires</span>
+
+      <span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">session</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">session</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Handler</code>函数是从<code>http</code>请求里面读取到<code>sessionid</code>然后从持久化层读取数据然后实例化一个<code>session</code>结构体的函数，没有啥好说的，注释写上面了。</p>
+<h2 id="安全防御问题">
+    <a href="#%e5%ae%89%e5%85%a8%e9%98%b2%e5%be%a1%e9%97%ae%e9%a2%98" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    安全防御问题
+</h2>
+<p>首先我还是那句话：<code>不懂攻击，怎么做防守</code>。
+那我们先说说这个问题怎么产生的:</p>
+<blockquote>
+<p><code>中间人攻击</code>（<code>Man-in-the-MiddleAttack</code>，简称<code>MITM攻击</code>）是一种<code>间接</code>的入侵攻击，这种攻击模式是通过各种技术手段将受入侵者控制的一台计算机虚拟放置在网络连接中的两台通信计算机之间，这台计算机就称为<code>中间人</code>。</p>
+</blockquote>
+<p>这个过程，正常用户在通过浏览器访问我们编写的网站，但是这个时候有个<code>hack</code>通过<code>arp</code>欺骗，把路由器的流量劫持到他的电脑上，然后黑客通过一些特殊的软件抓包你的网络请求流量信息，在这个过程中如果你<code>sessionid</code>如果存放在<code>cookie</code>中，很有可能被黑客提取处理，如果你这个时候登录了网站，这是黑客就拿到你的登录凭证，然后在登录进行<code>重放</code>也就是使用你的<code>sessionid</code>，从而达到访问你账户相关的数据目的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Session</span><span class="p">)</span> <span class="nf">MigrateSession</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="c1">// 迁移到新内存 防止会话一致引发安全问题
+</span><span class="c1"></span>    <span class="c1">// 这个问题的根源在 sessionid 不变，如果用户在未登录时拿到的是一个 sessionid，登录之后服务端给用户重新换一个 sessionid，就可以防止会话固定攻击了。
+</span><span class="c1"></span>    <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span> <span class="p">=</span> <span class="nf">generateUUID</span><span class="p">()</span>
+    <span class="nx">newSession</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">deepcopy</span><span class="p">.</span><span class="nf">Anything</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;migrate session make a deep copy from src into dst failed&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">newSession</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">ID</span> <span class="p">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span>
+    <span class="nx">newSession</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">Value</span> <span class="p">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ID</span>
+    <span class="nx">newSession</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">Expires</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">mgr</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TimeOut</span><span class="p">)</span>
+    <span class="nx">newSession</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nx">_w</span> <span class="p">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">_w</span>
+    <span class="nx">newSession</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">).</span><span class="nf">refreshCookie</span><span class="p">()</span>
+    <span class="c1">// 新内存开始持久化
+</span><span class="c1"></span>    <span class="c1">// log.Printf(&#34;old session pointer:%p \n&#34;, s)
+</span><span class="c1"></span>    <span class="c1">// log.Printf(&#34;new session pointer:%p \n&#34;, newSession.(*Session))
+</span><span class="c1"></span>    <span class="c1">//log.Println(&#34;MigrateSession:&#34;, newSession.(*Session))
+</span><span class="c1"></span>    <span class="k">return</span> <span class="nx">mgr</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">newSession</span><span class="p">.(</span><span class="o">*</span><span class="nx">Session</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果大家写过<code>Java</code>语言，都应该使用过<code>springboot</code>这个框架，如果你看过源代码，那就知道这个框架里面的<code>session</code>安全策略有一个<code>migrateSession</code>选项，表示在登录成功之后，创建一个新的会话，然后讲旧的 <code>session</code> 中的信息复制到新的 <code>session</code> 中。</p>
+<p>我参照他的策略，也同样在我这个库里面实现了，在用户匿名访问的时候是一个 <code>sessionid</code>，当用户成功登录之后，又是另外一个 <code>sessionid</code>，这样就可以有效避免会话固定攻击。</p>
+<p>使用的时候也可以<code>随时使用通过MigrateSession进行调用</code>，这个函数一但被调用，原始数据和<code>id</code>全部被刷新了，内存地址也换了，可以看我的源代码。</p>
+<h2 id="使用演示">
+    <a href="#%e4%bd%bf%e7%94%a8%e6%bc%94%e7%a4%ba" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    使用演示
+</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;log&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;time&#34;</span>
+
+    <span class="nx">sessionx</span> <span class="s">&#34;github.com/higker/sesssionx&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">var</span> <span class="p">(</span>
+    <span class="c1">// 配置信息
+</span><span class="c1"></span>    <span class="nx">cfg</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">sessionx</span><span class="p">.</span><span class="nx">Configs</span><span class="p">{</span>
+          <span class="nx">TimeOut</span><span class="p">:</span>        <span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>
+          <span class="nx">RedisAddr</span><span class="p">:</span>      <span class="s">&#34;127.0.0.1:6379&#34;</span><span class="p">,</span>
+          <span class="nx">RedisDB</span><span class="p">:</span>        <span class="mi">0</span><span class="p">,</span>
+          <span class="nx">RedisPassword</span><span class="p">:</span>  <span class="s">&#34;redis.nosql&#34;</span><span class="p">,</span>
+          <span class="nx">RedisKeyPrefix</span><span class="p">:</span> <span class="nx">sessionx</span><span class="p">.</span><span class="nx">SessionKey</span><span class="p">,</span>
+          <span class="nx">PoolSize</span><span class="p">:</span>       <span class="mi">100</span><span class="p">,</span>
+          <span class="nx">Cookie</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span>
+            <span class="nx">Name</span><span class="p">:</span>     <span class="nx">sessionx</span><span class="p">.</span><span class="nx">SessionKey</span><span class="p">,</span>
+            <span class="nx">Path</span><span class="p">:</span>     <span class="s">&#34;/&#34;</span><span class="p">,</span>
+            <span class="nx">Expires</span><span class="p">:</span>  <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span> <span class="o">*</span> <span class="mi">30</span><span class="p">),</span> <span class="c1">// TimeOut
+</span><span class="c1"></span>            <span class="nx">Secure</span><span class="p">:</span>   <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">HttpOnly</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// R表示redis存储 cfg是配置信息
+</span><span class="c1"></span>	  <span class="nx">sessionx</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">sessionx</span><span class="p">.</span><span class="nx">R</span><span class="p">,</span> <span class="nx">cfg</span><span class="p">)</span>
+
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/set&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">session</span> <span class="o">:=</span> <span class="nx">sessionx</span><span class="p">.</span><span class="nf">Handler</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span>
+        <span class="nx">session</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;K&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006 01-02 15:04:05&#34;</span><span class="p">))</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;set time value succeed.&#34;</span><span class="p">)</span>
+    <span class="p">})</span>
+
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/get&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">session</span> <span class="o">:=</span> <span class="nx">sessionx</span><span class="p">.</span><span class="nf">Handler</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span>
+        <span class="nx">v</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">session</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;K&#34;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;The stored value is : %s&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">))</span>
+    <span class="p">})</span>
+
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/migrate&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">session</span> <span class="o">:=</span> <span class="nx">sessionx</span><span class="p">.</span><span class="nf">Handler</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span>
+        <span class="nx">err</span> <span class="o">:=</span> <span class="nx">session</span><span class="p">.</span><span class="nf">MigrateSession</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="nx">session</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1goyv71f8qdj30a106sdg9.jpg" 
+    alt="健康检测" 
+     /></p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1goyv89devcj312a0f6jt5.jpg" 
+    alt="多项集成化测试" 
+     /></p>
+<h2 id="小-结">
+    <a href="#%e5%b0%8f-%e7%bb%93" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    小 结
+</h2>
+<p>推荐还是使用<code>JWT</code>这种方式做鉴权，不过也有一体化<code>web应用</code>的<code>session</code>也不会被这么早淘汰，如果上面有问题，欢迎大佬们<code>pr</code>，还有部分代码没有列出，可以去仓库看看。</p>
+<h2 id="相关链接">
+    <a href="#%e7%9b%b8%e5%85%b3%e9%93%be%e6%8e%a5" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    相关链接
+</h2>
+<p>代码仓库：<a href="https://github.com/auula/sessionx">https://github.com/auula/sessionx</a></p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/redis-distributed-lock/" title="Previous post (older)">
+            <span>Previous</span>
+            Redis Distributed Lock
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/web-safe-csrf/" title="Next post (newer)">
+            <span>Next</span>
+            Web Safe Csrf
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

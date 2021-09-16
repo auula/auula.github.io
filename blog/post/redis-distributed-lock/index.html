@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Redis Distributed Lock | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Redis Distributed Lock | 打码匠"/>
+    <meta itemprop="name" content="Redis Distributed Lock | 打码匠" />
+    <meta name="twitter:title" content="Redis Distributed Lock | 打码匠" />
+    <meta name="application-name" content="Redis Distributed Lock | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:37:49&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:37:49&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Redis Distributed Lock",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  163 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Redis Distributed Lock</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 1 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008eGmZEgy1gpg66tcks2j31900u07wi.jpg" 
+    alt="本篇文章讲Redis翻车事件😜" 
+     /></p>
+<h2 id="前-言">
+    <a href="#%e5%89%8d-%e8%a8%80" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    前 言
+</h2>
+<p>谈到分布式应用那必然离不开<code>分布式锁🔐</code>的问题，分布式锁在分布式应用中应用广泛，本文就讲讲基于<code>redis</code>实现的分布式锁的一些问题。</p>
+<h2 id="锁">
+    <a href="#%e9%94%81" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    锁
+</h2>
+<p>可能各位<code>coder</code>接触最多的还是在多线程的环境下，为了保证一个代码块在同一时间只能由一个线程访问情况，例如下图：</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuir03juj60ei09bglt02.jpg" 
+    alt="多线程下的锁" 
+     /></p>
+<p>对于单进程的并发场景，可以使用编程语言及相应的类库提供的锁，如<code>Java</code>中的 <code>synchronized</code> 语法以及 <code>ReentrantLock</code>，<code>Golang</code>中的<code>sync</code>包下面的<code>mutex</code>，<code>Rust</code>中的<code>async_std::sync::Mutex</code>，避免并发问题，这实际上是本地锁的方式。</p>
+<h2 id="分布式锁">
+    <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    分布式锁
+</h2>
+<p>但是现在流行的分布式架构，在分布式环境下，如何保证不同节点的线程同步执行呢？或者共享资源怎么上锁呢？？？</p>
+<p>在将应用拆分为分布式应用之前的单机系统中，对一些并发场景读取公共资源时如扣库存，卖车票之类的需求可以简单的使用同步或者是加锁就可以实现，但是应用分布式了之后系统由以前的单进程多线程的程序变为了多进程多线程，这时使用以上的解决方案明显就不够了。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiuj3dovnj60ek0e8aab02.jpg" 
+    alt="分布式架构下" 
+     /></p>
+<p><strong>一般业界有几种解决方:</strong></p>
+<ul>
+<li>基于 <code>DB</code> 的唯一索引</li>
+<li>基于 <code>Memcached</code>的<code> add 命令</code></li>
+<li>基于 <code>Zookeeper</code> 的临时有序节点</li>
+<li>基于 <code>Redis</code> 的<code>NX EX</code></li>
+<li>基于<code>Chubby</code>粗粒度分布式锁服务</li>
+</ul>
+<h2 id="redis的坑你填了几个">
+    <a href="#redis%e7%9a%84%e5%9d%91%e4%bd%a0%e5%a1%ab%e4%ba%86%e5%87%a0%e4%b8%aa" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Redis的坑你填了几个？
+</h2>
+<blockquote>
+<p>如果在分布式场景中，实现不同客户端的线程对代码和资源的同步访问，保证在多线程下处理共享数据的安全性，就需要用到分布式锁技术，我就来写写基于<code>Redis</code>的一些坑😁。</p>
+</blockquote>
+<p>在分布式时，在程序中修改已有数据时，需要先读取，然后进行修改保存，此时很容易遇到并发问题。由于修改和保存不是原子操作，在并发场景下，部分对数据的操作可能会丢失，本地锁无法在多个服务器之间生效，这时候保证数据的一致性就需要分布式锁来实现。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiujdxgu2j60l70if75702.jpg" 
+    alt="并行操作Redis示意图" 
+     /></p>
+<p><code>Redis</code> 锁主要利用 <code>Redis</code> 的 <code>setnx</code> 命令实现，</p>
+<ul>
+<li>加锁命令：<code>SETNX key value</code>，当键不存在时，对键进行设置操作并返回成功，否则返回失败,<code>KEY</code> 是锁的唯一标识，一般按业务来决定命名。</li>
+<li>解锁命令：<code>DEL key</code>，通过删除键值对释放锁，以便其他线程可以通过 <code>SETNX</code> 命令来获取锁。</li>
+<li>锁超时：<code>EXPIRE key timeout</code>, 设置 <code>key</code> 的超时时间，以保证即使锁没有被显式释放，锁也可以在一定时间后自动释放，避免资源被永远锁住。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="c1">// 伪代码实现
+</span><span class="c1"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">key</span>: <span class="kp">&amp;</span><span class="nb">&#39;static</span><span class="w"> </span><span class="kt">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;sync_lock&#34;</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">up_lock</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="c1">// 设置超时
+</span><span class="c1"></span><span class="w">        </span><span class="n">expire</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span><span class="w">
+</span><span class="w">        </span><span class="c1">// .....业务逻辑
+</span><span class="c1"></span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">// 基于redis SETNX 和 EXPIRE 的实现，问题代码
+</span><span class="c1"></span><span class="k">fn</span> <span class="nf">up_lock</span><span class="p">(</span><span class="n">key</span>: <span class="kp">&amp;</span><span class="nb">&#39;static</span><span class="w"> </span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">num</span>: <span class="kt">i8</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">i8</span> <span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="c1">// ..... 上锁逻辑
+</span><span class="c1"></span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">expire</span><span class="p">(</span><span class="n">key</span>: <span class="kp">&amp;</span><span class="nb">&#39;static</span><span class="w"> </span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">num</span>: <span class="kt">i8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="c1">// ... 自定义超时
+</span><span class="c1"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>写完这么一看还没有什么问题，其实上面🕳坑大着呢！！！如果你是这么去实现的，那笔者恭喜你，你掉坑里了😜（PS:这里不是代码问题导致的，而是<code>SETNX</code> 和 <code>EXPIRE</code> 非原子性导致的）。</p>
+<hr>
+<ol>
+<li><code>SETNX</code> 和 <code>EXPIRE</code> 非原子性</li>
+</ol>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1guiujq53mxj60qm08c0t102.jpg" 
+    alt="过程" 
+     /></p>
+<p>如果 <code>SETNX</code> 成功，在设置锁超时时间后，服务器挂掉、重启或网络问题等，导致 <code>EXPIRE</code> 命令没有执行，锁没有设置超时时间变成死锁。</p>
+<hr>
+<ol start="2">
+<li>锁误解除</li>
+</ol>
+<p>如果线程 <code>A</code> 成功获取到了锁，并且设置了过期时间<code> 30</code> 秒，但线程 <code>A </code>执行时间超过了 <code>30</code> 秒，锁过期自动释放，此时线程<code> B</code> 获取到了锁；随后 <code>A</code> 执行完成，线程 <code>A</code> 使用 <code>DEL</code> 命令来释放锁，但此时线程 <code>B</code> 加的锁还没有执行完成，线程<code>A</code>实际释放的线程是 <code>B</code> 加的锁，从而导致锁混乱，然后导致实际逻辑代码混乱和乃至关键数据丢失。</p>
+<hr>
+<ol start="3">
+<li>超时解锁导致并发</li>
+</ol>
+<p>如果线程 <code>A</code> 成功获取锁并设置过期时间 <code>30</code> 秒，但线程 <code>A</code> 执行时间超过了 <code>30</code> 秒，锁过期自动释放，此时线程 <code>B</code> 获取到了锁，线程 <code>A</code> 和线程 <code>B</code> 并发执行，那就没有分布式锁存在的意义了🤷‍。</p>
+<ul>
+<li>将过期时间设置足够长，确保代码逻辑在锁释放之前能够执行完成。</li>
+<li>为获取锁的线程增加守护线程，为将要过期但未释放的锁增加有效时间。</li>
+</ul>
+<hr>
+<ol start="4">
+<li>不可重入</li>
+</ol>
+<p>当线程在持有锁的情况下再次请求加锁，如果一个锁支持一个线程多次加锁，那么这个锁就是可重入的，如果一个不可重入锁被再次加锁，由于该锁已经被持有，再次加锁会失败。<code>Redis</code> 可通过对锁进行重入计数，加锁时加 <code>1</code>，解锁时减 <code>1</code>，当计数归 <code>0</code> 时释放锁。</p>
+<h2 id="小-结">
+    <a href="#%e5%b0%8f-%e7%bb%93" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    小 结
+</h2>
+<p><code>Redis</code>是个高性能的中间件，但是如果用在分布式锁上实现依然存在问题，我在一些网络文章看到很多人大部分都是用<code>redis</code>来解决分布式锁问题，希望这篇文章能帮助到你，记得点个关注！！</p>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/alibaba-hot-ring/" title="Previous post (older)">
+            <span>Previous</span>
+            Alibaba Hot Ring Perceive
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/golang-web-session-implement/" title="Next post (newer)">
+            <span>Next</span>
+            Golang Web Session Implement
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>

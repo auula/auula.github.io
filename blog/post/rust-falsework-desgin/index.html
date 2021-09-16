@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Rust Falsework Desgin | 打码匠</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="打码匠 | ibyte.me" />
+    <meta property="og:title" content="Rust Falsework Desgin | 打码匠"/>
+    <meta itemprop="name" content="Rust Falsework Desgin | 打码匠" />
+    <meta name="twitter:title" content="Rust Falsework Desgin | 打码匠" />
+    <meta name="application-name" content="Rust Falsework Desgin | 打码匠" />
+
+
+    <meta name="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+    <meta name="twitter:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta itemprop="description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles."/>
+    <meta property="og:description" content="Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Leon Ding" />
+<meta property="og:article:published_time" content=2021-09-16T22:22:45&#43;0800 />
+<meta property="article:published_time" content=2021-09-16T22:22:45&#43;0800 />
+
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Rust Falsework Desgin",
+    "author": {
+      "@type": "Person",
+      "name": "Leon Ding"
+    },
+    "datePublished": "2021-09-16",
+    "description": "",
+    "wordCount":  303 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2021-09-16",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Leon Ding",
+      "logo": {
+        "@type": "imageObject",
+        "url": "http:\/\/www.ibyte.me\/blog\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico" />
+    
+    <link rel="stylesheet" href="/blog/sass/main.min.85d2dd3a54e29956009c7c48e5f5d4bc22b6af329dc58a4fc8919e8c12720daa.css">
+    
+</head>
+    <script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/blog/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    打码匠
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/blog/blog/articles/">Articles</a>
+                
+                <button id="dark-mode-button">
+                  <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                  <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                </button>
+            </div>
+            </div>
+    </div>
+</nav>
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Rust Falsework Desgin</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                              
+                            
+                            By Leon Ding | <time>September 16, 2021</time>
+                            | 2 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h2 id="前言">
+    <a href="#%e5%89%8d%e8%a8%80" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    前言
+</h2>
+<blockquote>
+<p>断断续续看了半个月的<code>Rust</code>书，学了点基础，不知道做什么好？？于是我想着用业余时间撸一个<code>command line application</code>的骨架。然后就有了<code>https://github.com/auula/falsework</code>这个项目，<code>falsework</code>可以帮助你快速构建一个命令行应用。这篇文章写写<code>falsework</code>的使用并在后部分介绍一下怎么实现的。</p>
+</blockquote>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtta3lv37zj617x0u040n02.jpg" 
+    alt="rust学习曲线" 
+     /></p>
+<p>看了看这张图，那我估计还在<code>坡道起步</code>。。</p>
+<h2 id="导入依赖">
+    <a href="#%e5%af%bc%e5%85%a5%e4%be%9d%e8%b5%96" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    导入依赖
+</h2>
+<ul>
+<li><a href="https://crates.io/crates/falsework">https://crates.io/crates/falsework</a></li>
+</ul>
+<p>在你的项目中添加依赖如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">dependencies</span><span class="p">]</span>
+<span class="nx">falsework</span> <span class="p">=</span> <span class="s2">&#34;0.1.3&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="快速构建">
+    <a href="#%e5%bf%ab%e9%80%9f%e6%9e%84%e5%bb%ba" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    快速构建
+</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">error</span>::<span class="n">Error</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">falsework</span>::<span class="p">{</span><span class="n">app</span><span class="p">,</span><span class="w"> </span><span class="n">cmd</span><span class="p">};</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 通过falsework创建一个骨架
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">falsework</span>::<span class="n">app</span>::<span class="n">new</span><span class="p">();</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 应用元数据信息
+</span><span class="c1"></span><span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">&#34;calculator&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">author</span><span class="p">(</span><span class="s">&#34;Leon Ding &lt;ding@ibyte.me&gt;&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">version</span><span class="p">(</span><span class="s">&#34;0.0.1&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">description</span><span class="p">(</span><span class="s">&#34;A calculator that only supports addition.&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 构建命令行项
+</span><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cmd</span>::<span class="n">CommandItem</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="c1">// run 命令所对应命令行逻辑代码
+</span><span class="c1"></span><span class="w">        </span><span class="n">run</span>: <span class="o">|</span><span class="n">ctx</span><span class="o">|</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span><span class="w"> </span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">dyn</span><span class="w"> </span><span class="n">Error</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">            </span><span class="c1">// 通过上下文获取flag绑定的数据
+</span><span class="c1"></span><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">value_of</span><span class="p">(</span><span class="s">&#34;--x&#34;</span><span class="p">).</span><span class="n">parse</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">value_of</span><span class="p">(</span><span class="s">&#34;--y&#34;</span><span class="p">).</span><span class="n">parse</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span><span class="w">            </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{} + {} = {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="p">);</span><span class="w">
+</span><span class="w">            </span><span class="c1">// 如果处理发生了错误则调用 cmd::err_msg 会优雅的退出
+</span><span class="c1"></span><span class="w">            </span><span class="c1">// Err(cmd::err_msg(&#34;Application produce error！&#34;));
+</span><span class="c1"></span><span class="w">            </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span><span class="w">        </span><span class="p">},</span><span class="w">
+</span><span class="w">        </span><span class="c1">// 命令帮助信息
+</span><span class="c1"></span><span class="w">        </span><span class="n">long</span>: <span class="s">&#34;这是一个加法计算程序需要两个flag参数 --x --y&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="c1">// 命令介绍
+</span><span class="c1"></span><span class="w">        </span><span class="n">short</span>: <span class="s">&#34;加法计算&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="c1">// 通过add激活命令
+</span><span class="c1"></span><span class="w">        </span><span class="n">r#use</span>: <span class="s">&#34;add&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">}.</span><span class="n">build</span><span class="p">();</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 给add命令绑定flag
+</span><span class="c1"></span><span class="w">    </span><span class="n">command</span><span class="p">.</span><span class="n">bound_flag</span><span class="p">(</span><span class="s">&#34;--x&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;加数&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">command</span><span class="p">.</span><span class="n">bound_flag</span><span class="p">(</span><span class="s">&#34;--y&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;被加数&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 往app里面添加一个命令集
+</span><span class="c1"></span><span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">add_cmd</span><span class="p">(</span><span class="n">command</span><span class="p">);</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c1">// 最后run 程序开始监听命令行输入
+</span><span class="c1"></span><span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">run</span><span class="p">();</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>上面这个例子运行起来结果:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$: ./calculator add --x<span class="o">=</span><span class="m">10</span> --y<span class="o">=</span><span class="m">10</span>
+<span class="m">10</span> + <span class="nv">10</span> <span class="o">=</span> <span class="m">20</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>到此为止你就快速构建一个命令行计算器了，你只需要写你核心逻辑，其他操作<code>falsework</code>帮助你完成。</p>
+<ol>
+<li>例如如果我不记得了命令了，只记得一个单词或者字母，程序会帮助你修复：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$: ./calculator a
+
+You need this <span class="nb">command</span> ?
+	add
+a : The corresponding <span class="nb">command</span> <span class="nb">set</span> was not found!
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>可以看到程序提示你有一个对应的<code>add</code>命令可以使用，如果不知道<code>add</code>有啥参数，在后面
+加上<code>--help</code>即可获得帮助信息：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$: ./calculator add --help
+
+Help:
+  这是一个加法计算程序需要两个flag参数 --x --y
+
+Usage:
+  calculator add <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  --y, 被加数
+  --x, 加数
+</code></pre></td></tr></table>
+</div>
+</div><p>构建出来主程序预览：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$: ./calculator
+
+
+A calculator that only supports addition.
+calculator 0.0.1 Leon Ding &lt;ding@ibyte.me&gt;
+
+Usage:
+  calculator  <span class="o">[</span>command<span class="o">]</span>
+
+Available Commands:
+  add	加法计算
+
+Flags:
+  --help   <span class="nb">help</span> <span class="k">for</span> calculator
+
+Use <span class="s2">&#34;calculator [command] --help&#34;</span> <span class="k">for</span> more information about a command.
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="其他操作">
+    <a href="#%e5%85%b6%e4%bb%96%e6%93%8d%e4%bd%9c" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    其他操作
+</h2>
+<p>有多种构建方式，例如下面的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="w">    </span><span class="cp">#[test]</span><span class="w">
+</span><span class="w">    </span><span class="k">fn</span> <span class="nf">test_add_commands</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">falsework</span>::<span class="n">app</span>::<span class="n">new</span><span class="p">();</span><span class="w">
+</span><span class="w">
+</span><span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">&#34;calculator&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">            </span><span class="p">.</span><span class="n">author</span><span class="p">(</span><span class="s">&#34;Leon Ding &lt;ding@ibyte.me&gt;&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">            </span><span class="p">.</span><span class="n">version</span><span class="p">(</span><span class="s">&#34;0.0.2&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">            </span><span class="p">.</span><span class="n">description</span><span class="p">(</span><span class="s">&#34;A command line program built with Falsework.&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">command_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="o">!</span><span class="p">[</span><span class="w">
+</span><span class="w">            </span><span class="n">cmd</span>::<span class="n">CommandItem</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">                </span><span class="n">run</span>: <span class="o">|</span><span class="n">_ctx</span><span class="o">|</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span><span class="w"> </span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">dyn</span><span class="w"> </span><span class="n">Error</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">                    </span><span class="c1">// _ctx.args 获取命令行参数
+</span><span class="c1"></span><span class="w">                    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;call foo command.&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">                    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span><span class="w">                </span><span class="p">},</span><span class="w">
+</span><span class="w">                </span><span class="n">long</span>: <span class="s">&#34;这是一个测试命令，使用foo将调用foo命令。&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">                </span><span class="n">short</span>: <span class="s">&#34;foo命令&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">                </span><span class="n">r#use</span>: <span class="s">&#34;foo&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">            </span><span class="p">},</span><span class="w">
+</span><span class="w">            </span><span class="n">cmd</span>::<span class="n">CommandItem</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">                </span><span class="n">run</span>: <span class="o">|</span><span class="n">_ctx</span><span class="o">|</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span><span class="w"> </span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">dyn</span><span class="w"> </span><span class="n">Error</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">                    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;call bar command.&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">                    </span><span class="nb">Ok</span><span class="p">(())</span><span class="w">
+</span><span class="w">                </span><span class="p">},</span><span class="w">
+</span><span class="w">                </span><span class="n">long</span>: <span class="s">&#34;这是一个测试命令，使用bar将调用bar命令。&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">                </span><span class="n">short</span>: <span class="s">&#34;bar命令&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">                </span><span class="n">r#use</span>: <span class="s">&#34;bar&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">            </span><span class="p">},</span><span class="w">
+</span><span class="w">        </span><span class="p">].</span><span class="n">iter</span><span class="p">().</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">c</span><span class="o">|</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">build</span><span class="p">()).</span><span class="n">collect</span><span class="p">();</span><span class="w">
+</span><span class="w">
+</span><span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">commands</span><span class="p">(</span><span class="n">command_list</span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:#?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">app</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="falsework的设计">
+    <a href="#falsework%e7%9a%84%e8%ae%be%e8%ae%a1" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Falsework的设计
+</h2>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gtsagkvp4lj60qo0k0tau02.jpg" 
+    alt="falsework结构图" 
+     /></p>
+<p>整体来说也就是<code>3</code>大块，对应一个<code>cli</code>程序抽象的话也就这么多了，然后就是对单块的结构进行封装如图，然后就是构建一个骨架了。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gttaacjpohj60qo0k0mxd02.jpg" 
+    alt="参数规格解析" 
+     /></p>
+<p>拿上面这个例子来说，在你敲击回车那一刻，骨架要帮做很多<code>args</code>解析的事情，然后构建对应任务处理。</p>
+<p><img loading="lazy" 
+    src="https://tva1.sinaimg.cn/large/008i3skNgy1gttac10fbvj60r00k6dgc02.jpg" 
+    alt="逻辑图" 
+     /></p>
+<p>这张图就是当程序监听到命令行有输入操作的时候要做的事情，我把他抽象画成了一个图，大部分程序员应该能看得懂，看不懂可以对照仓库代码看看，虽然代码写的一坨，很<code>low</code>代码，毕竟还只是刚刚入坑<code>Rust</code>。。。。新手朋友可以看看，对了有启发或者帮助记得留一个<code>star</code>！</p>
+<h2 id="仓库">
+    <a href="#%e4%bb%93%e5%ba%93" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    仓库
+</h2>
+<ul>
+<li><a href="//github.com/auula/falsework">https://github.com/auula/falsework</a></li>
+</ul>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        <a rel="prev" href="/blog/post/golang-channel-desgin/" title="Previous post (older)">
+            <span>Previous</span>
+            Golang Channel Desgin
+            </a>
+        
+        
+        
+        <a rel="next" href="/blog/post/compound-data-type-of-rust/" title="Next post (newer)">
+            <span>Next</span>
+            Compound Data Type of Rust
+            </a> 
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "https-hugo-tania-netlify-app" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            })
+        }
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/blog/blog/index.xml">RSS</a>
+            
+        </nav>
+    </section>
+    <script defer src="/blog/ts/features.b5555d1ae12309fd7a67c0d19ce81e7098647818f6758eb95f88ea9d550d2d2c.js" data-enable-footnotes="true"></script>
+</footer>
+    </body>
+</html>
