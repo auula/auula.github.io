@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Post copies on 打码匠</title>
-    <link>http://www.ibyte.me/post-copy/</link>
+    <link>http://www.ibyte.me/blog/post-copy/</link>
     <description>Recent content in Post copies on 打码匠</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 31 May 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.ibyte.me/post-copy/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.ibyte.me/blog/post-copy/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Footnote test</title>
-      <link>http://www.ibyte.me/post-copy/footnote/</link>
+      <link>http://www.ibyte.me/blog/post-copy/footnote/</link>
       <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/footnote/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/footnote/</guid>
       <description>Lorem ipsum dolor sit amet1 consectetur adipisicing elit. Nemo tempora eum cumque neque voluptatum, odit ipsum consequatur animi.
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo tempora eum cumque neque voluptatum, odit ipsum2 consequatur animi.
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo tempora eum cumque neque voluptatum, odit ipsum consequatur animi.
@@ -25,10 +25,10 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo tempora eum cumque
     
     <item>
       <title>Katex support</title>
-      <link>http://www.ibyte.me/post-copy/test-katex/</link>
+      <link>http://www.ibyte.me/blog/post-copy/test-katex/</link>
       <pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/test-katex/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/test-katex/</guid>
       <description>The following
 $$ \int_{a}^{b} x^2 dx $$
 Is an integral
@@ -41,10 +41,10 @@ See the online reference of supported TeX functions.
     
     <item>
       <title>MathJax support</title>
-      <link>http://www.ibyte.me/post-copy/test-mathjax/</link>
+      <link>http://www.ibyte.me/blog/post-copy/test-mathjax/</link>
       <pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/test-mathjax/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/test-mathjax/</guid>
       <description>The following
 $$ \int_{a}^{b} x^2 dx $$
 Is an integral
@@ -56,37 +56,37 @@ Enable MathJax in the config file by setting the mathjax param to true. This wil
     
     <item>
       <title>Markdown Syntax Guide</title>
-      <link>http://www.ibyte.me/post-copy/markdown-syntax/</link>
+      <link>http://www.ibyte.me/blog/post-copy/markdown-syntax/</link>
       <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/markdown-syntax/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/markdown-syntax/</guid>
       <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Example Lazy Load Image</title>
-      <link>http://www.ibyte.me/post-copy/example-lazy-load-image/</link>
+      <link>http://www.ibyte.me/blog/post-copy/example-lazy-load-image/</link>
       <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/example-lazy-load-image/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/example-lazy-load-image/</guid>
       <description>Nya nya nyan meow meow mama  More napping, more napping all the napping is exhausting stretch out on bed you are a captive audience while sitting on the toilet, pet me slap the dog because cats rule bleghbleghvomit my furball really tie the room together always hungry. Humans,humans, humans oh how much they love us felines we are the center of attention they feed, they clean miaow then turn around and show you my bum.</description>
     </item>
     
     <item>
       <title>Placeholder Text</title>
-      <link>http://www.ibyte.me/post-copy/placeholder-text/</link>
+      <link>http://www.ibyte.me/blog/post-copy/placeholder-text/</link>
       <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/placeholder-text/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/placeholder-text/</guid>
       <description>&lt;p&gt;Lorem est tota propiore conpellat pectoribus de pectora summo.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Emoji Support</title>
-      <link>http://www.ibyte.me/post-copy/emoji-support/</link>
+      <link>http://www.ibyte.me/blog/post-copy/emoji-support/</link>
       <pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/emoji-support/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/emoji-support/</guid>
       <description>&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;</description>
     </item>
     

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>math on 打码匠</title>
-    <link>http://www.ibyte.me/categories/math/</link>
+    <link>http://www.ibyte.me/blog/categories/math/</link>
     <description>Recent content in math on 打码匠</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 22 May 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.ibyte.me/categories/math/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.ibyte.me/blog/categories/math/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Katex support</title>
-      <link>http://www.ibyte.me/post-copy/test-katex/</link>
+      <link>http://www.ibyte.me/blog/post-copy/test-katex/</link>
       <pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/test-katex/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/test-katex/</guid>
       <description>The following
 $$ \int_{a}^{b} x^2 dx $$
 Is an integral
@@ -29,10 +29,10 @@ See the online reference of supported TeX functions.
     
     <item>
       <title>MathJax support</title>
-      <link>http://www.ibyte.me/post-copy/test-mathjax/</link>
+      <link>http://www.ibyte.me/blog/post-copy/test-mathjax/</link>
       <pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/test-mathjax/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/test-mathjax/</guid>
       <description>The following
 $$ \int_{a}^{b} x^2 dx $$
 Is an integral

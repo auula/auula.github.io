@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 打码匠</title>
-    <link>http://www.ibyte.me/post/</link>
+    <link>http://www.ibyte.me/blog/post/</link>
     <description>Recent content in Posts on 打码匠</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 16 Sep 2021 22:49:08 +0800</lastBuildDate>
     
-	<atom:link href="http://www.ibyte.me/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.ibyte.me/blog/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Golang Database Reverse Engineering</title>
-      <link>http://www.ibyte.me/post/golang-database-reverse-engineering/</link>
+      <link>http://www.ibyte.me/blog/post/golang-database-reverse-engineering/</link>
       <pubDate>Thu, 16 Sep 2021 22:49:08 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/golang-database-reverse-engineering/</guid>
+      <guid>http://www.ibyte.me/blog/post/golang-database-reverse-engineering/</guid>
       <description>相信大家在开发的过程中会去编写一些数据库表对应的model，工作比较重复并且低效，本文将介绍笔者写的一个工具可以根据数据库表生产对应的model逆向工程工具。
    什么是s2s？  s2s (sql to structure)是一款命令行数据库逆向工程工具，它可以通过数据库表生成对应的Java、Go、Rust结构体（class），后面将陆续支持更多的语言。
    配置数据库源  s2s依赖于你的数据库，所以需要你配置好你的数据库连接信息，以便s2s会正常的运行。配置信息方法很简单你只需要在你的环境变量中加入以下信息即可。
@@ -30,10 +30,10 @@
     
     <item>
       <title>Rust Lifetime</title>
-      <link>http://www.ibyte.me/post/rust-lifetime/</link>
+      <link>http://www.ibyte.me/blog/post/rust-lifetime/</link>
       <pubDate>Thu, 16 Sep 2021 22:47:17 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/rust-lifetime/</guid>
+      <guid>http://www.ibyte.me/blog/post/rust-lifetime/</guid>
       <description>lifetime寿命  Rust中的每一个引用都有一个有效的作用域，生命周期就是为这个作用域服务的，大部分生命周期编译器可以推断出来，可以是隐式的。但是如果在某些情况下编译器就无法正常推断出来了，需要我们自己手动标注，标注生命周期语法就是&#39;a这样的语法。
    为什么需要生命周期？  例如下面例子就是在两个字符串切片里面查找最长的那个并且返回！
 1 2 3 4 5 6 7 8  // &amp;#39;a 是指3个引用的作用域生命周期要一致 fn find_long_str&amp;lt;&amp;#39;a&amp;gt;(x: &amp;amp;&amp;#39;astr,y: &amp;amp;&amp;#39;astr)-&amp;gt; &amp;amp;&amp;#39;astr{ifx.len()&amp;gt;y.len(){x}else{y}}  上面我就加注了生命周期标识符，如果不加编译器会报错，原因是因为我们这个函数引用的是外部的变量，不能确定引用的变量是否已经被销毁了，那这样就是悬垂引用！
@@ -43,10 +43,10 @@
     
     <item>
       <title>Rust Box Pointer</title>
-      <link>http://www.ibyte.me/post/rust-box-pointer/</link>
+      <link>http://www.ibyte.me/blog/post/rust-box-pointer/</link>
       <pubDate>Thu, 16 Sep 2021 22:46:21 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/rust-box-pointer/</guid>
+      <guid>http://www.ibyte.me/blog/post/rust-box-pointer/</guid>
       <description>什么是智能指针？  在Rust中智能指针有很多种，用大白话说就是一个数据结构，实现了一些特殊的trait从而达到某种特性和功能，然后去管理某块内存上的数据，相当于一个盒子一样包装一层，这篇文章将介绍一下Box。
    Deref  Deref这个trait只要实现了它那么你自定义的结构体，就可以使用*解引用拿取你结构体里面所包装的数据，熟悉Rust都知道*是用来解引用的，下面的I32Box(i32)就是实现了Deref从而达到直接使用*拿取出内部的数据。
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23  usestd::ops::Deref;struct I32Box(i32);// impl Deref implDerefforI32Box{type Target=i32;fn deref(&amp;amp;self)-&amp;gt; &amp;amp;Self::Target{&amp;amp;self.0}}implI32Box{fn new(v:i32)-&amp;gt; Self{I32Box(v)}}fn main(){letn=I32Box::new(1024_i32);println!(&amp;#34;{}&amp;#34;,*n);}     Drop  Rust里面有drop函数，也有一个Drop的trait同样如果自定义的结构体实现这个Drop，那么就你变量离开作用域的时候执行自定义Drop的方法的逻辑。
@@ -56,10 +56,10 @@
     
     <item>
       <title>Traffic Restrictions</title>
-      <link>http://www.ibyte.me/post/traffic-restrictions/</link>
+      <link>http://www.ibyte.me/blog/post/traffic-restrictions/</link>
       <pubDate>Thu, 16 Sep 2021 22:45:00 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/traffic-restrictions/</guid>
+      <guid>http://www.ibyte.me/blog/post/traffic-restrictions/</guid>
       <description>前 言   在开发高并发系统时，我们可能会遇到接口访问频次过高，为了保证系统的高可用和稳定性，这时候就需要做流量限制，你可能是用的 Nginx 这种 Web Server 来控制请求，也可能是用了一些流行的类库实现。限流是高并发系统的一大杀器，在设计限流算法之前我们先来了解一下它们是什么。
     限 流  限流的目的是通过对并发访问请求进行限速，或者对一个时间窗口内的请求进行限速来保护系统，一旦达到限制速率则可以拒绝服务、排队或等待、降级等处理。通过对并发（或者一定时间窗口内）请求进行限速来保护系统，一旦达到限制速率则拒绝服务（定向到错误页或告知资源没有了）、排队等待（比如秒杀、评论、下单）、降级（返回兜底数据或默认数据）。
 如 图:
@@ -74,10 +74,10 @@
     
     <item>
       <title>Web Safe Csrf</title>
-      <link>http://www.ibyte.me/post/web-safe-csrf/</link>
+      <link>http://www.ibyte.me/blog/post/web-safe-csrf/</link>
       <pubDate>Thu, 16 Sep 2021 22:43:44 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/web-safe-csrf/</guid>
+      <guid>http://www.ibyte.me/blog/post/web-safe-csrf/</guid>
       <description>概 述  随着互联网的高速发展，信息安全问题已经成为企业最为关注的焦点之一，而前端又是引发企业安全问题的高危据点。在移动互联网时代，前端人员除了传统的 XSS、CSRF 等安全问题之外，又时常遭遇网络劫持、非法调用 API 等新型安全问题。当然，浏览器自身也在不断在进化和发展，不断引入 CSP、Same-Site Cookies 等新技术来增强安全性，但是仍存在很多潜在的威胁，这需要我们技术人员不断对系统进行“查漏补缺”。
    废话少说，先看问题  为了模拟问题我这边用go写了2个服务端的代码，正常交易系统的API，当然这里只是为了演示漏洞利用，代码比较简单如下:
 transaction.go 内容:
@@ -86,10 +86,10 @@ transaction.go 内容:
     
     <item>
       <title>Golang Web Session Implement</title>
-      <link>http://www.ibyte.me/post/golang-web-session-implement/</link>
+      <link>http://www.ibyte.me/blog/post/golang-web-session-implement/</link>
       <pubDate>Thu, 16 Sep 2021 22:41:38 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/golang-web-session-implement/</guid>
+      <guid>http://www.ibyte.me/blog/post/golang-web-session-implement/</guid>
       <description>概 述  大家都知道 session 是web应用在服务器端实现的一种用户和服务器之间认证的解决方案，目前 Go 标准包没有为 session 提供任何支持，本文我将讲解session的实现原理，和一些常见基于session安全产生的防御问题。
 当然有人可能看了会抬杠，说现在大部分不是前后端分离架构吗？对，你可以使用JWT解决你的问题。但是也有一些一体化web应用需要session，所以我准备造个轮子。自己造的轮子哪里出问题了，比别人更熟悉，有bug了，还不用求着别人修bug,自己修就好了，呵呵哈哈哈，当然这几句话有点皮😜。
    需 求  我觉得一名好的程序员，在写程序之前应该列一下需求分析，整理一下思路，然后再去写代码。
@@ -102,10 +102,10 @@ storage接口  1 2 3 4 5 6 7 8 9  package sessionx // session storage interface 
     
     <item>
       <title>Redis Distributed Lock</title>
-      <link>http://www.ibyte.me/post/redis-distributed-lock/</link>
+      <link>http://www.ibyte.me/blog/post/redis-distributed-lock/</link>
       <pubDate>Thu, 16 Sep 2021 22:37:49 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/redis-distributed-lock/</guid>
+      <guid>http://www.ibyte.me/blog/post/redis-distributed-lock/</guid>
       <description>前 言  谈到分布式应用那必然离不开分布式锁🔐的问题，分布式锁在分布式应用中应用广泛，本文就讲讲基于redis实现的分布式锁的一些问题。
    锁  可能各位coder接触最多的还是在多线程的环境下，为了保证一个代码块在同一时间只能由一个线程访问情况，例如下图：
 对于单进程的并发场景，可以使用编程语言及相应的类库提供的锁，如Java中的 synchronized 语法以及 ReentrantLock，Golang中的sync包下面的mutex，Rust中的async_std::sync::Mutex，避免并发问题，这实际上是本地锁的方式。
@@ -120,10 +120,10 @@ Redis 锁主要利用 Redis 的 setnx 命令实现，
     
     <item>
       <title>Alibaba Hot Ring Perceive</title>
-      <link>http://www.ibyte.me/post/alibaba-hot-ring/</link>
+      <link>http://www.ibyte.me/blog/post/alibaba-hot-ring/</link>
       <pubDate>Thu, 16 Sep 2021 22:27:07 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/alibaba-hot-ring/</guid>
+      <guid>http://www.ibyte.me/blog/post/alibaba-hot-ring/</guid>
       <description>👨‍💻‍：直奔话题 HotRing，少说废话。   去年阿里的Tair团队发表过一篇论文HotRing: A Hotspot-Aware In-Memory Key-Value Store，这篇论文里面讲述了阿里的最快的KV分布式存储引擎核心HotRing的技术与实现，我看了他们的数据显示其引擎吞吐性能可达600M ops/s，这个速度比传统的KVS系统2.58倍的性能提升，于是我就抱着好奇去看看了那篇论文然后就有这篇文章。
     👨‍💻‍： 有问题就有故事？  一个新东西或者技术出现，那就说明老的那套方案技术存在某种缺陷或者满足不了某种的特殊需求了&amp;hellip;&amp;hellip;
 问题动机就是：某一时刻流量上来了，系统扛不住了&amp;hellip; 只要说到高并发，相信这个回答占大多数。HotRing的出现也是这个原因，真的是面向问题编程😜。。。挖槽，真的验证这句话了。。。
@@ -144,10 +144,10 @@ Redis 锁主要利用 Redis 的 setnx 命令实现，
     
     <item>
       <title>Compound Data Type of Rust</title>
-      <link>http://www.ibyte.me/post/compound-data-type-of-rust/</link>
+      <link>http://www.ibyte.me/blog/post/compound-data-type-of-rust/</link>
       <pubDate>Thu, 16 Sep 2021 22:25:30 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/compound-data-type-of-rust/</guid>
+      <guid>http://www.ibyte.me/blog/post/compound-data-type-of-rust/</guid>
       <description>概 述   好久没有更新rust相关的内容了，更新一波Rust的内容，本篇讲介绍一下Rust中的复合数据类型。
     Composite Type  复合数据类型是一种数据类型，它可以原始的基本数据类型和其它的复合类型所构成， 构成一个复合类型的动作，又称作组合。
 本文讲介绍一下在Rust中有tuple、array、struct、enum几个复合类型。
@@ -159,10 +159,10 @@ Redis 锁主要利用 Redis 的 setnx 命令实现，
     
     <item>
       <title>Rust Falsework Desgin</title>
-      <link>http://www.ibyte.me/post/rust-falsework-desgin/</link>
+      <link>http://www.ibyte.me/blog/post/rust-falsework-desgin/</link>
       <pubDate>Thu, 16 Sep 2021 22:22:45 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/rust-falsework-desgin/</guid>
+      <guid>http://www.ibyte.me/blog/post/rust-falsework-desgin/</guid>
       <description>前言   断断续续看了半个月的Rust书，学了点基础，不知道做什么好？？于是我想着用业余时间撸一个command line application的骨架。然后就有了https://github.com/auula/falsework这个项目，falsework可以帮助你快速构建一个命令行应用。这篇文章写写falsework的使用并在后部分介绍一下怎么实现的。
  看了看这张图，那我估计还在坡道起步。。
    导入依赖   https://crates.io/crates/falsework  在你的项目中添加依赖如下：
@@ -171,10 +171,10 @@ Redis 锁主要利用 Redis 的 setnx 命令实现，
     
     <item>
       <title>Golang Channel Desgin</title>
-      <link>http://www.ibyte.me/post/golang-channel-desgin/</link>
+      <link>http://www.ibyte.me/blog/post/golang-channel-desgin/</link>
       <pubDate>Thu, 16 Sep 2021 22:19:16 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/golang-channel-desgin/</guid>
+      <guid>http://www.ibyte.me/blog/post/golang-channel-desgin/</guid>
       <description>相信大家在开发的过程中经常会使用到go中并发利器channel，channel 是CSP并发模型中最重要的一个组件，两个独立的并发实体通过共享的通讯channel进行通信。大多数人只是会用这么个结构很少有人讨论它底层实现，这篇文章讲写写channel的底层实现。
    channel  channel的底层实现是一个结构体，源代码如下:
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  type hchan struct { qcount uint // total data in the queue  dataqsiz uint // size of the circular queue  buf unsafe.Pointer // points to an array of dataqsiz elements  elemsize uint16 closed uint32 elemtype *_type // element type  sendx uint // send index  recvx uint // receive index  recvq waitq // list of recv waiters  sendq waitq // list of send waiters  // lock protects all fields in hchan, as well as several  // fields in sudogs blocked on this channel.</description>
@@ -182,10 +182,10 @@ Redis 锁主要利用 Redis 的 setnx 命令实现，
     
     <item>
       <title>Golang Memory Escape Analysis</title>
-      <link>http://www.ibyte.me/post/golang-memory-escape-analysis/</link>
+      <link>http://www.ibyte.me/blog/post/golang-memory-escape-analysis/</link>
       <pubDate>Thu, 16 Sep 2021 22:07:09 +0800</pubDate>
       
-      <guid>http://www.ibyte.me/post/golang-memory-escape-analysis/</guid>
+      <guid>http://www.ibyte.me/blog/post/golang-memory-escape-analysis/</guid>
       <description>前 言  很多时候为了更快的开发效率，大多数程序员都是在使用抽象层级更高的技术，包括语言，框架，设计模式等。所以导致很多程序员包括我自己在内对于底层和基础的知识都会有些生疏和，但是正是这些底层的东西构建了我们熟知的解决方案，同时决定了一个技术人员的上限。
 在写C和C++的时候动态分配内存是让程序员自己手动管理，这样做的好处是，需要申请多少内存空间可以很好的掌握怎么分配，但是如果忘记释放内存，则会导致内存泄漏。
 Rust又比👆上面俩门语言分配内存方式显得不同，Rust的内存管理主要特色可以看做是编译器帮你在适当的地方插入delete来释放内存，这样一来你不需要显式指定释放，runtime也不需要任何GC，但是要做到这点，编译器需要能分析出在什么地方delete，这就需要你代码按照其规则来写了。

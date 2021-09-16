@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>emoji on 打码匠</title>
-    <link>http://www.ibyte.me/tags/emoji/</link>
+    <link>http://www.ibyte.me/blog/tags/emoji/</link>
     <description>Recent content in emoji on 打码匠</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 05 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.ibyte.me/tags/emoji/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.ibyte.me/blog/tags/emoji/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Emoji Support</title>
-      <link>http://www.ibyte.me/post-copy/emoji-support/</link>
+      <link>http://www.ibyte.me/blog/post-copy/emoji-support/</link>
       <pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.ibyte.me/post-copy/emoji-support/</guid>
+      <guid>http://www.ibyte.me/blog/post-copy/emoji-support/</guid>
       <description>&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;</description>
     </item>
     

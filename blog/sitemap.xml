@@ -3,198 +3,198 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://www.ibyte.me/projects/fw_project/</loc>
+    <loc>http://www.ibyte.me/blog/projects/fw_project/</loc>
     <lastmod>2020-11-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/projects/gsql_project/</loc>
+    <loc>http://www.ibyte.me/blog/projects/gsql_project/</loc>
     <lastmod>2020-11-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/projects/s2s_project/</loc>
+    <loc>http://www.ibyte.me/blog/projects/s2s_project/</loc>
     <lastmod>2020-11-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/projects/sessionx_project/</loc>
+    <loc>http://www.ibyte.me/blog/projects/sessionx_project/</loc>
     <lastmod>2020-11-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/</loc>
+    <loc>http://www.ibyte.me/blog/</loc>
     <lastmod>2021-09-16T22:49:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/golang-database-reverse-engineering/</loc>
+    <loc>http://www.ibyte.me/blog/post/golang-database-reverse-engineering/</loc>
     <lastmod>2021-09-16T22:49:08+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/</loc>
+    <loc>http://www.ibyte.me/blog/post/</loc>
     <lastmod>2021-09-16T22:49:08+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/rust-lifetime/</loc>
+    <loc>http://www.ibyte.me/blog/post/rust-lifetime/</loc>
     <lastmod>2021-09-16T22:47:17+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/rust-box-pointer/</loc>
+    <loc>http://www.ibyte.me/blog/post/rust-box-pointer/</loc>
     <lastmod>2021-09-16T22:46:21+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/traffic-restrictions/</loc>
+    <loc>http://www.ibyte.me/blog/post/traffic-restrictions/</loc>
     <lastmod>2021-09-16T22:45:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/web-safe-csrf/</loc>
+    <loc>http://www.ibyte.me/blog/post/web-safe-csrf/</loc>
     <lastmod>2021-09-16T22:43:44+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/golang-web-session-implement/</loc>
+    <loc>http://www.ibyte.me/blog/post/golang-web-session-implement/</loc>
     <lastmod>2021-09-16T22:41:38+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/redis-distributed-lock/</loc>
+    <loc>http://www.ibyte.me/blog/post/redis-distributed-lock/</loc>
     <lastmod>2021-09-16T22:37:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/alibaba-hot-ring/</loc>
+    <loc>http://www.ibyte.me/blog/post/alibaba-hot-ring/</loc>
     <lastmod>2021-09-16T22:27:07+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/compound-data-type-of-rust/</loc>
+    <loc>http://www.ibyte.me/blog/post/compound-data-type-of-rust/</loc>
     <lastmod>2021-09-16T22:25:30+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/rust-falsework-desgin/</loc>
+    <loc>http://www.ibyte.me/blog/post/rust-falsework-desgin/</loc>
     <lastmod>2021-09-16T22:22:45+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/golang-channel-desgin/</loc>
+    <loc>http://www.ibyte.me/blog/post/golang-channel-desgin/</loc>
     <lastmod>2021-09-16T22:19:16+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post/golang-memory-escape-analysis/</loc>
+    <loc>http://www.ibyte.me/blog/post/golang-memory-escape-analysis/</loc>
     <lastmod>2021-09-16T22:07:09+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/categories/</loc>
+    <loc>http://www.ibyte.me/blog/categories/</loc>
     <lastmod>2021-05-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/footnote/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/footnote/</loc>
     <lastmod>2021-05-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/</loc>
     <lastmod>2021-05-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/categories/syntax/</loc>
+    <loc>http://www.ibyte.me/blog/categories/syntax/</loc>
     <lastmod>2021-05-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/test-katex/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/test-katex/</loc>
     <lastmod>2021-05-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/categories/math/</loc>
+    <loc>http://www.ibyte.me/blog/categories/math/</loc>
     <lastmod>2021-05-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/test-mathjax/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/test-mathjax/</loc>
     <lastmod>2021-05-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/articles/</loc>
+    <loc>http://www.ibyte.me/blog/articles/</loc>
     <lastmod>2020-11-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/projects/</loc>
+    <loc>http://www.ibyte.me/blog/projects/</loc>
     <lastmod>2020-11-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/css/</loc>
+    <loc>http://www.ibyte.me/blog/tags/css/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/html/</loc>
+    <loc>http://www.ibyte.me/blog/tags/html/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/markdown/</loc>
+    <loc>http://www.ibyte.me/blog/tags/markdown/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/markdown-syntax/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/markdown-syntax/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/</loc>
+    <loc>http://www.ibyte.me/blog/tags/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/categories/themes/</loc>
+    <loc>http://www.ibyte.me/blog/categories/themes/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/example-lazy-load-image/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/example-lazy-load-image/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/image/</loc>
+    <loc>http://www.ibyte.me/blog/tags/image/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/placeholder-text/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/placeholder-text/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/text/</loc>
+    <loc>http://www.ibyte.me/blog/tags/text/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/tags/emoji/</loc>
+    <loc>http://www.ibyte.me/blog/tags/emoji/</loc>
     <lastmod>2019-03-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.ibyte.me/post-copy/emoji-support/</loc>
+    <loc>http://www.ibyte.me/blog/post-copy/emoji-support/</loc>
     <lastmod>2019-03-05T00:00:00+00:00</lastmod>
   </url>
   
