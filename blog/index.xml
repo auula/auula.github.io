@@ -1,17 +1,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>打码匠</title>
-    <link>http://www.ibyte.me/blog/</link>
+    <link>http://www.ibyte.me/</link>
     <description>Recent content on 打码匠</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Sep 2021 22:49:08 +0800</lastBuildDate><atom:link href="http://www.ibyte.me/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 16 Sep 2021 22:49:08 +0800</lastBuildDate><atom:link href="http://www.ibyte.me/index.xml" rel="self" type="application/rss+xml" />
     <item>
     <title>Golang Database Reverse Engineering</title>
-    <link>http://www.ibyte.me/blog/post/golang-database-reverse-engineering/</link>
+    <link>http://www.ibyte.me/post/golang-database-reverse-engineering/</link>
     <pubDate>Thu, 16 Sep 2021 22:49:08 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/golang-database-reverse-engineering/</guid>
+    <guid>http://www.ibyte.me/post/golang-database-reverse-engineering/</guid>
     <description>
         &lt;p&gt;相信大家在开发的过程中会去编写一些数据库表对应的&lt;code&gt;model&lt;/code&gt;，工作比较重复并且低效，本文将介绍笔者写的一个工具可以根据数据库表生产对应的&lt;code&gt;model&lt;/code&gt;逆向工程工具。&lt;/p&gt;
 &lt;h2 id=&#34;什么是s2s&#34;&gt;
@@ -567,10 +567,10 @@
     
     <item>
     <title>Rust Lifetime</title>
-    <link>http://www.ibyte.me/blog/post/rust-lifetime/</link>
+    <link>http://www.ibyte.me/post/rust-lifetime/</link>
     <pubDate>Thu, 16 Sep 2021 22:47:17 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/rust-lifetime/</guid>
+    <guid>http://www.ibyte.me/post/rust-lifetime/</guid>
     <description>
         &lt;h2 id=&#34;lifetime寿命&#34;&gt;
     &lt;a href=&#34;#lifetime%e5%af%bf%e5%91%bd&#34; class=&#34;anchor&#34;&gt;
@@ -688,10 +688,10 @@
     
     <item>
     <title>Rust Box Pointer</title>
-    <link>http://www.ibyte.me/blog/post/rust-box-pointer/</link>
+    <link>http://www.ibyte.me/post/rust-box-pointer/</link>
     <pubDate>Thu, 16 Sep 2021 22:46:21 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/rust-box-pointer/</guid>
+    <guid>http://www.ibyte.me/post/rust-box-pointer/</guid>
     <description>
         &lt;h2 id=&#34;什么是智能指针&#34;&gt;
     &lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af%e6%99%ba%e8%83%bd%e6%8c%87%e9%92%88&#34; class=&#34;anchor&#34;&gt;
@@ -951,10 +951,10 @@
     
     <item>
     <title>Traffic Restrictions</title>
-    <link>http://www.ibyte.me/blog/post/traffic-restrictions/</link>
+    <link>http://www.ibyte.me/post/traffic-restrictions/</link>
     <pubDate>Thu, 16 Sep 2021 22:45:00 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/traffic-restrictions/</guid>
+    <guid>http://www.ibyte.me/post/traffic-restrictions/</guid>
     <description>
         &lt;h2 id=&#34;前-言&#34;&gt;
     &lt;a href=&#34;#%e5%89%8d-%e8%a8%80&#34; class=&#34;anchor&#34;&gt;
@@ -1455,10 +1455,10 @@
     
     <item>
     <title>Web Safe Csrf</title>
-    <link>http://www.ibyte.me/blog/post/web-safe-csrf/</link>
+    <link>http://www.ibyte.me/post/web-safe-csrf/</link>
     <pubDate>Thu, 16 Sep 2021 22:43:44 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/web-safe-csrf/</guid>
+    <guid>http://www.ibyte.me/post/web-safe-csrf/</guid>
     <description>
         &lt;h2 id=&#34;概-述&#34;&gt;
     &lt;a href=&#34;#%e6%a6%82-%e8%bf%b0&#34; class=&#34;anchor&#34;&gt;
@@ -1835,10 +1835,10 @@
     
     <item>
     <title>Golang Web Session Implement</title>
-    <link>http://www.ibyte.me/blog/post/golang-web-session-implement/</link>
+    <link>http://www.ibyte.me/post/golang-web-session-implement/</link>
     <pubDate>Thu, 16 Sep 2021 22:41:38 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/golang-web-session-implement/</guid>
+    <guid>http://www.ibyte.me/post/golang-web-session-implement/</guid>
     <description>
         &lt;h2 id=&#34;概-述&#34;&gt;
     &lt;a href=&#34;#%e6%a6%82-%e8%bf%b0&#34; class=&#34;anchor&#34;&gt;
@@ -2763,10 +2763,10 @@
     
     <item>
     <title>Redis Distributed Lock</title>
-    <link>http://www.ibyte.me/blog/post/redis-distributed-lock/</link>
+    <link>http://www.ibyte.me/post/redis-distributed-lock/</link>
     <pubDate>Thu, 16 Sep 2021 22:37:49 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/redis-distributed-lock/</guid>
+    <guid>http://www.ibyte.me/post/redis-distributed-lock/</guid>
     <description>
         &lt;p&gt;&lt;img loading=&#34;lazy&#34; 
     src=&#34;https://tva1.sinaimg.cn/large/008eGmZEgy1gpg66tcks2j31900u07wi.jpg&#34; 
@@ -2939,10 +2939,10 @@
     
     <item>
     <title>Alibaba Hot Ring Perceive</title>
-    <link>http://www.ibyte.me/blog/post/alibaba-hot-ring/</link>
+    <link>http://www.ibyte.me/post/alibaba-hot-ring/</link>
     <pubDate>Thu, 16 Sep 2021 22:27:07 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/alibaba-hot-ring/</guid>
+    <guid>http://www.ibyte.me/post/alibaba-hot-ring/</guid>
     <description>
         &lt;h2 id=&#34;直奔话题-hotring少说废话&#34;&gt;
     &lt;a href=&#34;#%e7%9b%b4%e5%a5%94%e8%af%9d%e9%a2%98-hotring%e5%b0%91%e8%af%b4%e5%ba%9f%e8%af%9d&#34; class=&#34;anchor&#34;&gt;
@@ -3130,10 +3130,10 @@
     
     <item>
     <title>Compound Data Type of Rust</title>
-    <link>http://www.ibyte.me/blog/post/compound-data-type-of-rust/</link>
+    <link>http://www.ibyte.me/post/compound-data-type-of-rust/</link>
     <pubDate>Thu, 16 Sep 2021 22:25:30 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/compound-data-type-of-rust/</guid>
+    <guid>http://www.ibyte.me/post/compound-data-type-of-rust/</guid>
     <description>
         &lt;h2 id=&#34;概-述&#34;&gt;
     &lt;a href=&#34;#%e6%a6%82-%e8%bf%b0&#34; class=&#34;anchor&#34;&gt;
@@ -3488,10 +3488,10 @@ To learn more, run the &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; again
     
     <item>
     <title>Rust Falsework Desgin</title>
-    <link>http://www.ibyte.me/blog/post/rust-falsework-desgin/</link>
+    <link>http://www.ibyte.me/post/rust-falsework-desgin/</link>
     <pubDate>Thu, 16 Sep 2021 22:22:45 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/rust-falsework-desgin/</guid>
+    <guid>http://www.ibyte.me/post/rust-falsework-desgin/</guid>
     <description>
         &lt;h2 id=&#34;前言&#34;&gt;
     &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;anchor&#34;&gt;
@@ -3876,10 +3876,10 @@ Use &lt;span class=&#34;s2&#34;&gt;&amp;#34;calculator [command] --help&amp;#34;
     
     <item>
     <title>Golang Channel Desgin</title>
-    <link>http://www.ibyte.me/blog/post/golang-channel-desgin/</link>
+    <link>http://www.ibyte.me/post/golang-channel-desgin/</link>
     <pubDate>Thu, 16 Sep 2021 22:19:16 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/golang-channel-desgin/</guid>
+    <guid>http://www.ibyte.me/post/golang-channel-desgin/</guid>
     <description>
         &lt;p&gt;相信大家在开发的过程中经常会使用到&lt;code&gt;go&lt;/code&gt;中并发利器&lt;code&gt;channel&lt;/code&gt;，&lt;code&gt;channel&lt;/code&gt; 是&lt;code&gt;CSP&lt;/code&gt;并发模型中最重要的一个组件，两个独立的并发实体通过共享的通讯&lt;code&gt;channel&lt;/code&gt;进行通信。大多数人只是会用这么个结构很少有人讨论它底层实现，这篇文章讲写写&lt;code&gt;channel&lt;/code&gt;的底层实现。&lt;/p&gt;
 &lt;h2 id=&#34;channel&#34;&gt;
@@ -4200,10 +4200,10 @@ Use &lt;span class=&#34;s2&#34;&gt;&amp;#34;calculator [command] --help&amp;#34;
     
     <item>
     <title>Golang Memory Escape Analysis</title>
-    <link>http://www.ibyte.me/blog/post/golang-memory-escape-analysis/</link>
+    <link>http://www.ibyte.me/post/golang-memory-escape-analysis/</link>
     <pubDate>Thu, 16 Sep 2021 22:07:09 +0800</pubDate>
     
-    <guid>http://www.ibyte.me/blog/post/golang-memory-escape-analysis/</guid>
+    <guid>http://www.ibyte.me/post/golang-memory-escape-analysis/</guid>
     <description>
         &lt;h2 id=&#34;前-言&#34;&gt;
     &lt;a href=&#34;#%e5%89%8d-%e8%a8%80&#34; class=&#34;anchor&#34;&gt;
