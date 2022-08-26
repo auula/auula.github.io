@@ -1,147 +1,276 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Leon Ding | TechPaper </title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Leon Ding,HomePages,Blog,ibyte.me,github.com/auula,Share computer science and technology, Golang, Rust, distributed systems, system design articles." />
-		<meta name="author" content="Leon Ding">
-		<link rel="shortcut icon" type="image/x-icon" href="https://avatars.githubusercontent.com/u/38412458?v=4" />
-		<link href="static/css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.3/font/bootstrap-icons.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/github.min.css">
-		<style>
-			/* CSS */
-					@import url(https://cdnjs.cloudflare.com/ajax/libs/firacode/2.0.0/fira_code.min.css);
-					
-					.code-text {
-						font-family: 'Fira Code', monospace;
-						font-size: 18px;
-					}
-					  
-				</style>
 
-		<style>
-			.bd-placeholder-img {
-		        font-size: 1.125rem;
-		        text-anchor: middle;
-		        -webkit-user-select: none;
-		        -moz-user-select: none;
-		        user-select: none;
-		      }
+<head>
+    <title>Leon Ding | Resume online</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://unpkg.com/@sakun/system.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="https://avatars.githubusercontent.com/u/38412458?v=4" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/github.min.css">
+    <style type="text/css">
+        @font-face {
+            font-family: Geneva9;
+            src: url("fonts/FindersKeepers.ttf")
+        }
+
+        @font-face {
+            font-family: Chicago_12;
+            src: url("fonts/ChiKareGo2.ttf");
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            width: 90rem;
+            margin-left: 240px;
+            margin-bottom: 60px;
+            margin-top: 25px;
+        }
+
+        .container {
+            width: 80%;
+        }
+
+
+        aside {
+            width: 200px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            padding: 8px;
+            display: flex;
+            align-items: stretch;
+        }
+
+        html {
+            font-family: "Inconsolata", Menlo, Chicago, Geneva;
+            font-size: 18px;
+            letter-spacing: -0.025em;
+            min-height: 100vh;
+        }
+
+        h3 {
+            font-family: Chicago;
+            font-size: 1.5em;
+        }
+
+        .heading {
+            font-size: 3rem;
+        }
+
+        .desc {
+            font-family: Geneva_9;
+            font-size: 2em;
+        }
+
+
+        .center {
+            text-align: center;
+        }
+
+        .component {
+            display: flex;
+            margin-top: 24px;
+            font-family: Geneva;
+            font-size: 1em;
+        }
+
+        .alert-text,
+        .dialog-text,
+        .modal-text,
+        .modeless-text {
+            font-family: Chicago_12;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        .dialog-text {
+            margin-top: 20px;
+        }
+
+        .modal-text,
+        .alert-text {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        p {
+            font-family: Geneva;
+            font-size: 0.9em;
+        }
+
+
+        blockquote {
+            margin: 0 0 20px;
+            padding: 20px;
+            width: 80%;
+            font-size: 14px;
+            border: 1px solid black;
+        }
+
+        blockquote footer {
+            margin: 12px 0 0 12px;
+        }
+
+        .example {
+            margin: 16px;
+            padding: 12px 24px;
+            border-left: 1px solid #000000;
+        }
+
+        summary {
+            font-size: 14px;
+            padding-top: 10px;
+        }
+
+        pre {
+            font-size: 13px;
+        }
+
+        .modal-dialog {
+            width: 50%;
+        }
+
+        .btn.active {
+            background: black;
+            border-radius: 6px;
+            color: white;
+            font-family: Chicago_12;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border: 1.5px solid black;
+            padding-right: 46px;
+        }
+
+        .menu-items {
+            padding: 0;
+            font-size: 14px;
+        }
+
+
+        .code-text {
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">About Me</h1>
+            <button aria-label="Resize" class="resize"></button>
+        </div>
+        <div class="separator"></div>
+
+        <div class="alert-contents" style="padding-left: 30px; padding-right:20px;">
+
+            <section class="field-row" style="justify-content: flex-start">
+                <img class="standard-dialog center" style="width: 180px; height: 180px;"
+                    src="https://avatars.githubusercontent.com/u/38412458?v=4">
+                <p class="alert-text desc readme" style="padding-left:10px;"></p>
+            </section>
+
+            <section class="field-row" style="justify-content: flex-end">
+                <button class="btn" onclick="window.location.href='https://github.com/auula'">Github</button>
+                <button class="btn" onclick="window.location.href='https://blog.ibyte.me'">Blog</button>
+            </section>
+
+        </div>
+
+
+    </div>
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">Show me code:</h1>
+            <button aria-label="Resize" class="resize"></button>
+        </div>
+        <div class="separator"></div>
+
+        <div class="window-pane" id="code">
+            <pre><code class="desc">
+// author.rs 2021-09-16 17:12:27	
+fn main() {
+	// Create an instance
+	let engineer = Programmer {
+		// String type content variable
+		name: String::from("Leon Ding"), 
+		// An array of a string type with a length of 3
+		skill: ["Java","Go","Rust"], 
+		// Limit parameter type through enumeration
+		sex: Gender::Boy, 
+		age: 22,
+		address: "Shanghai",
+	};
+
+	println!("engineer = {:?}",engineer);
+}
 		
-		      @media (min-width: 768px) {
-		        .bd-placeholder-img-lg {
-		          font-size: 3.5rem;
-		        }
-		      }
-		    </style>
-	</head>
-	<body>
-		<div class="px-4  my-5 text-center">
-			<img class="d-block mx-auto mb-4" src="https://avatars.githubusercontent.com/u/38412458?v=4" alt="" width="200"
-			 height="200">
-			<h1 class="display-5 fw-bold">Leon Ding</h1>
-			<div class="col-lg-6 mx-auto">
-				<p class="lead mb-4">
-					<span class="readme"></span>
-				</p>
-				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-					<button type="button" class="btn btn-dark btn-lg px-4 me-md-2" onclick="window.location.href='https://github.com/auula'"><i class="bi-github" role="img" aria-label="GitHub"></i>
-						Github</button>
-					<button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="window.location.href='https://blog.ibyte.me'"><i class="bi bi-journal-richtext"></i>&nbsp;&nbsp;Blog&nbsp;&nbsp;&nbsp;</button>
-				</div>
-			</div>
-		</div>
-		<!-- col-lg-9 -->
-		<div class="code-text col-md-10 mx-auto col-lg-7" id="code">
-			<pre><code>
-	// author.rs 2021-09-16 17:12:27	
-	fn main() {
-		// 创建一个实例
-		let engineer = Programmer {
-			// String类型内容可变
-			name: String::from("Leon Ding"), 
-			// 一个长度为3的字符串面量类型的数组
-			skill: ["Java","Go","Rust"], 
-			// 通过枚举限制参数类型
-			sex: Gender::Boy, 
-			age: 22,
-			address: "Shanghai",
-		};
+// Metropolitanization limit range
+#[derive(Debug)]
+enum Gender {
+	Boy,
+	Girl,
+}
 
-		println!("engineer = {:?}",engineer);
-	}
-			
-	// 枚举限制取值范围
-	#[derive(Debug)]
-	enum Gender {
-		Boy,
-		Girl,
-	}
+// Define a structure
+#[derive(Debug)]
+struct Programmer< 'skill,'a> {
+	name: String,
+	skill: [&'skill str; 3],
+	sex: Gender,
+	age: u8,
+	address: &'a str,
+}
+						</code></pre>
+        </div>
+    </div>
+    <div class="standard-dialog center">
+        <h1 class="dialog-text">The Macintosh Finder, Version 1.0 (18 Jan 84)</h1>
+        <p class="dialog-text">&copy; 1984 Apple Computer</p>
+    </div>
+    <script type="application/javascript" src="static/js/typed.min.js"></script>
+    <script type="application/javascript" src="static/js/jquery.slim.min.js"></script>
+    <script type="application/javascript" src="static/js/highlight.min.js"></script>
+    <script type="application/javascript" src="static/js/rust.min.js"></script>
+    <script type="text/javascript">
 
-	// 定义一个结构体
-	#[derive(Debug)]
-	struct Programmer< 'skill,'a> {
-		name: String,
-		skill: [&'skill str; 3],
-		sex: Gender,
-		age: u8,
-		address: &'a str,
-	}
-		</code></pre>
-		</div>
-
-		<div class="container">
-			<footer class="py-3 my-4">
-				<ul class="nav justify-content-center border-bottom pb-3 mb-3">
-					<!-- <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-					<li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-					<li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
-					<li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-					<li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li> -->
-				</ul>
-				<p class="text-center text-muted">© 2017 - 2022 ibyte.me, Inc</p>
-			</footer>
-		</div>
-		<script type="application/javascript" src="static/js/bootstrap.bundle.min.js"></script>
-		<script type="application/javascript" src="static/js/bootstrap.min.js"></script>
-		<script type="application/javascript" src="static/js/typed.min.js"></script>
-		<script type="application/javascript" src="static/js/jquery.slim.min.js"></script>
-		<script type="application/javascript" src="static/js/highlight.min.js"></script>
-		<script type="application/javascript" src="static/js/rust.min.js"></script>
-		<script type="application/javascript" src="static/js/mobile-detect.min.js"></script>
+        hljs.initHighlightingOnLoad();
 
 
-		<script type="text/javascript">
-			var md = new MobileDetect(window.navigator.userAgent);
-
-			if (md.mobile()) {
-				document.getElementById("code").style.fontSize = '12px';
-			}
-
-
-			hljs.initHighlightingOnLoad();
-
-
-			var optionsVision = {
-				strings: [
-					'I am a software engineer and a geek, I use technology stacks such as Java、Golang、Rust、TypeScript. My area of expertise is distributed systems, and at the same time I am interested in compilers, if you like it we can communicate happily 🤝.',
-				],
-				typeSpeed: 90, //打印速度
-				startDelay: 300, //开始之前的延迟300毫秒
-				loop: false, //是否循环
-			};
-			var typedoptionsVision = new Typed('.readme', optionsVision);
+        var optionsVision = {
+            strings: [
+                'Hi！I am Leon Ding~ I am a software engineer and a geek, I use technology stacks such as Java、Golang、Rust、TypeScript. My area of expertise is distributed systems, and at the same time I am interested in compilers, if you like it we can communicate happily 🤝.',
+            ],
+            typeSpeed: 90, //打印速度
+            startDelay: 300, //开始之前的延迟300毫秒
+            loop: false, //是否循环
+            smartBackspace: false,
+        };
+        var typedoptionsVision = new Typed('.readme', optionsVision);
 
 
-			console.log("\t\t\t\t__________\n" +
-				"\t\t\t\t\\______   \\____   ____   _____  \n" +
-				"\t\t\t\t |     ___/  _ \\_/ __ \\ /     \\ \n" +
-				"\t\t\t\t |    |  (  <_> )  ___/|  Y Y  \\\n" +
-				"\t\t\t\t |____|   \\____/ \\___  >__|_|  /\n" +
-				"\t\t\t\t                     \\/      \\/ ");
-			console.log("If you find a bug on this page, please contact the developer: Leon Ding <https://github.com/auula>");
-		</script>
-	</body>
+        console.log("\t\t\t\t__________\n" +
+            "\t\t\t\t\\______   \\____   ____   _____  \n" +
+            "\t\t\t\t |     ___/  _ \\_/ __ \\ /     \\ \n" +
+            "\t\t\t\t |    |  (  <_> )  ___/|  Y Y  \\\n" +
+            "\t\t\t\t |____|   \\____/ \\___  >__|_|  /\n" +
+            "\t\t\t\t                     \\/      \\/ ");
+        console.log("If you find a bug on this page, please contact the developer: Leon Ding <https://github.com/auula>");
+    </script>
+</body>
+
 </html>
