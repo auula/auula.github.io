@@ -249,7 +249,9 @@ struct Programmer< 'skill,'a> {
     <script type="text/javascript">
 
         hljs.initHighlightingOnLoad();
-
+	
+	const audio = new Audio('keyboard.mp3');
+	audio.play();    
 
         var optionsVision = {
             strings: [
@@ -262,6 +264,9 @@ struct Programmer< 'skill,'a> {
         var typedoptionsVision = new Typed('.readme', optionsVision);
 
         console.log("If you find a bug on this page, please contact the developer: Leon Ding <https://github.com/auula>");
+	    
+
+	    
     </script>
 </body>
 
