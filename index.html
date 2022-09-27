@@ -202,7 +202,7 @@
 
         <div class="window-pane" id="code">
             <pre><code class="desc code-text">
-// author.rs 2021-09-16 17:12:27	
+$: cat author.rs
 fn main() {
 	// Create an instance
 	let engineer = Programmer {
@@ -250,8 +250,8 @@ struct Programmer< 'skill,'a> {
 
         hljs.initHighlightingOnLoad();
 	
-	const audio = new Audio('keyboard.mp3');
-	audio.play();    
+	var audio = new Audio('keyboard.mp3');
+	  
 
         var optionsVision = {
             strings: [
@@ -261,8 +261,11 @@ struct Programmer< 'skill,'a> {
             startDelay: 300, //开始之前的延迟300毫秒
             loop: false, //是否循环
         };
+	    
         var typedoptionsVision = new Typed('.readme', optionsVision);
-
+	
+	audio.play();      
+	    
         console.log("If you find a bug on this page, please contact the developer: Leon Ding <https://github.com/auula>");
 	    
 
