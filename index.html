@@ -209,7 +209,7 @@ fn main() {
 		// String type content variable
 		name: String::from("Leon Ding"), 
 		// An array of a string type with a length of 3
-		skill: ["Java","Go","Rust"], 
+		skill: ["C","Java","Go","Rust","JavaScript","Linux"], 
 		// Limit parameter type through enumeration
 		sex: Gender::Boy, 
 		age: 22,
@@ -230,7 +230,7 @@ enum Gender {
 #[derive(Debug)]
 struct Programmer< 'skill,'a> {
 	name: String,
-	skill: [&'skill str; 3],
+	skill: [&'skill str; 6],
 	sex: Gender,
 	age: u8,
 	address: &'a str,
